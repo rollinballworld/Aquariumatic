@@ -19,4 +19,4 @@ Attached devices
 16x2 LCD display (i2c Slave)
 8 Channel Relay Board
 DS18B20 Digital Thermal Probe (Connected via OneWire)
-
+pH Analog Meter Kit
