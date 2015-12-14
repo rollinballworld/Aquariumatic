@@ -1,32 +1,12 @@
 /*
-  Script to print PH to serial
- 
+  Script to print PH & temp to i2c
+  Adaptation based on Michael Ratcliffe's example code:
  
   28/8/2015  Michael Ratcliffe  Mike@MichaelRatcliffe.com
- 
- 
-          This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
- 
- 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
- 
- 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
     Parts:
     -Arduino - Uno/Mega
   -df Robot Ph Probe Kit [SKU:SEN0169] This is a great PH sensor compared to the ones ive had in the past
- 
- 
- 
-    See www.MichaelRatcliffe.com/Projects for a Pinout and user guide or consult the Zip you got this code from
  
 */
  
@@ -37,8 +17,8 @@
  
 #include <OneWire.h>
 #include <DallasTemperature.h>
-#include <LiquidCrystal.h> //Standard LCD Lbrary
-#include <EEPROM.h> //Standard EEPROM Library
+#include <LiquidCrystal.h> //Standard LCD Lbrary - TO AMEND TO I2C SCREEN
+#include <EEPROM.h> //Standard EEPROM Library - TO REMOVE
  
  
 //*********************** User defined variables ****************************//
@@ -128,7 +108,7 @@ void setup()
   pinMode(TempProbePossitive , OUTPUT );//ditto but for positive
   digitalWrite(TempProbePossitive , HIGH );
   read_Temp();// getting rid of the first bad reading
-  Read_Eprom();
+  //Read_Eprom();
   Splash_Screen();
  
  
