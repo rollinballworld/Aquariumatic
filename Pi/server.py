@@ -22,7 +22,7 @@ settings = dict(
 # r"/" is root address for localhost
 application - tornado.web.Application((
   (r"/", MainHandler),
-  (r"/", AdminHandler),
+  (r"/admin", AdminHandler),
   ), **settings)
   
 if __name__ == "__main__":
