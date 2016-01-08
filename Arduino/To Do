@@ -1,0 +1,10 @@
+Plan:
+
+Temp/pH sensing
+On setup the arduino will request the ranges form temp and pH levels from the Raspberry Pi over the i2c connection.
+It will then monitor input from the pH and temp sensors, and send an alert to the Pi via 
+i2c if the values step outside of the range.
+
+Relays
+The Pi will send commands to the Arduino to switch on the relays for the heaters, lights etc. These will come 
+from either user button presses on the web interface, or automated calls in response to the above alerts.
