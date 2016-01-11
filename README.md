@@ -1,4 +1,4 @@
-# Aquarium
+# Aquariumatic
 Code repository for a Pi-Arduino Aquarium Management system, by Liam O'Reilly
 
 To Address - Pi
@@ -17,6 +17,6 @@ Monitor incoming data and process commands and changes.
 
 Attached devices
 16x2 LCD display (i2c Slave)
-8 Channel Relay Board
-DS18B20 Digital Thermal Probe (Connected via OneWire)
-pH Analog Meter Kit
+8 Channel Relay Board (connected to Arduino Mega)
+DS18B20 Digital Thermal Probe (Connected via OneWire to Arudino)
+pH Analog Meter Kit (Connected to Arduino)
