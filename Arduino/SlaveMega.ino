@@ -1,49 +1,53 @@
 #include <Wire.h>
 
-#define SLAVE_ADDRESS 0x04
-int number = 0;
-int state = 0;
+char x = "";
+
+// function that executes whenever data is received from master
+// this function is registered as an event, see setup()
+void receiveEvent(int howMany)
+{
+  x = "";
+  while( Wire.available()){
+    x += (char)Wire.read();
+  }
+  do_command(x);
+}
+
+void requestEvent()
+{
+  //Return temp and pH Readings as a char
+  //Collect data as a string then convert using c_str
+  Wire.write(data.c_str());
+}
+
+void do_command(char x) {
+  switch(x) {
+    case 'HeatingOn': Heating("On"); break;
+    case 'HeatingOff': Heating("Off"); break;
+    case 'Lighting1': Lighting(1); break;
+    case 'Lighting2': Lighting(2); break;
+    case 'Lighting3': Lighting(3); break;
+    default: break;
+  }
+  
+}
 
 void setup() {
-pinMode(13, OUTPUT);
-Serial.begin(9600); // start serial for output
-// initialize i2c as slave
-Wire.begin(SLAVE_ADDRESS);
+  // setup relay pins here:
 
-// define callbacks for i2c communication
-Wire.onReceive(receiveData);
-Wire.onRequest(sendData);
-
-Serial.println(“Ready!”);
+  Wire.begin(15);                // join i2c bus with address #4
+  Wire.onReceive(receiveEvent);
+  Wire.onRequest(requestEvent);
 }
 
-void loop() {
-delay(100);
+void loop(){
+  //Check ph and Temp here
 }
 
-// callback for received data
-void receiveData(int byteCount){
-
-while(Wire.available()) {
-number = Wire.read();
-Serial.print(“data received: “);
-Serial.println(number);
-
-if (number == 1){
-
-if (state == 0){
-digitalWrite(13, HIGH); // set the LED on
-state = 1;
-}
-else{
-digitalWrite(13, LOW); // set the LED off
-state = 0;
-}
-}
-}
+void Heating(string state){
+ //handle heating relays 
 }
 
-// callback for sending data
-void sendData(){
-Wire.write(number);
+void Lighting(int light){
+ //handle light relays 
 }
