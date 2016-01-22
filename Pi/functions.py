@@ -36,7 +36,7 @@ def Gmail(recipient, subject, body):
     import smtplib
 
     gmail_user = "aquariumatic@gmail.com"
-    gmail_pwd = "Craigisprettyclever"
+    gmail_pwd = "pw"
     FROM = user
     TO = recipient if type(recipient) is list else [recipient]
     SUBJECT = subject
