@@ -1,0 +1,19 @@
+To do list
+
+29/01/2016
+
+-work out how to return information from the server and display in the web page
+The server.py will receive temp/pH/status information from the Arduino (i2c slave) to be displayed on the screen
+
+-add i2c coding to functions.py
+Use to pad out the two send functions, and also add code for polling the i2c to create a device list, and also 
+one for reading incoming commands
+
+-test gmail coding in functions.py
+
+-start writing arduino code
+setup as i2c slave, define the relay pins and the pins for digital temp and pH sensors.
+retrieve pH/temp thresholds (from either i2c master or from EEPROM)
+Loop to read temp/pH - update screen and react if any discrepency (trigger heater is temp under threshold, send alert ot i2c 
+master to email alert etc)
+Loop to monitor i2c for instruction (requests for temp/pH, commands to switch on light/heater relays etc, updated thresholdss)
