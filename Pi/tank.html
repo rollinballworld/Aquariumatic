@@ -10,7 +10,7 @@ function aq_request(){
     else 
         throw new Error("Ajax is not supported by your browser");
 
-    var url = "";
+    var url = "server.py";
     // Set content type header information for sending url encoded variables in the request
     hr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     // Access the onreadystatechange event for the XMLHttpRequest object
