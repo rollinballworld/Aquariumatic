@@ -19,8 +19,12 @@
     <button>Update temperature Threshold</button>
 </form>
 <form>
-    <input name="myBtn" type="submit" value="SubmitData" onclick="aq_request();"> <br><br>
+    <input type="button" onclick="show_test()" value="alert" />
+        <script type="application/javascript">
+            set_test("{{test}}");
+        </script>
     <div id="status"></div>
+    
 </form>
 </body>
 </html>
