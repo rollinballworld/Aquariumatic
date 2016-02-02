@@ -1,33 +1,6 @@
 <html>
 <head>
-<script>
-function aq_request(){
-    var hr; 
-    if (window.XMLHttpRequest) 
-        hr = new XMLHttpRequest(); 
-    else if (window.ActiveXObject) 
-        hr = new ActiveXObject("Msxml2.XMLHTTP");
-    else 
-        throw new Error("Ajax is not supported by your browser");
-
-    var url = "server.py";
-    // Set content type header information for sending url encoded variables in the request
-    hr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    // Access the onreadystatechange event for the XMLHttpRequest object
-    hr.onreadystatechange = function() {
-    	if (hr.readyState < 4)
-            document.getElementById('div1').innerHTML = "Loading...";
-        else if (hr.readyState === 4) {
-        	if (hr.status == 200 && hr.status < 300) 
-                	document.getElementById('status').innerHTML = hr.responseText;
-	    }
-    }
-    // Send the data to PHP now... and wait for response to update the status div
-    hr.open("POST", url, true);
-    hr.send(null); // Actually execute the request
-    //document.getElementById("status").innerHTML = "processing...";
-}
-</script>
+<script src="{{ static_url('scripts/test.js') }}" type="application/javascript"></script>
 </head>
 <body>
 <form action="" method="post">
