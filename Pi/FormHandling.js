@@ -1,4 +1,6 @@
 //FormHandling.js
+// https://scotch.io/tutorials/submitting-ajax-forms-with-jquery#submitting-the-form-using-ajax-magic-js
+
 $(document).ready(function() {
 
     // process the form
