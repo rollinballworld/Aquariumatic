@@ -1,3 +1,4 @@
+import os.path
 import tornado.httpserver
 import tornado.ioloop
 import tornado.options
@@ -54,9 +55,11 @@ if __name__ == "__main__":
     app = tornado.web.Application(
         handlers=[
             (r"/", IndexHandler),
-            (r"/aquarium(\d+)", TankHandler),
-        ]
-    )
+            (r"/aquarium(\d+)", TankHandler)],
+            static_path=os.path.join(os.path.dirname(__file__), "static"),
+            template_path=os.path.join(os.path.dirname(__file__), "templates"))
+
+    
     httpServer = tornado.httpserver.HTTPServer(app)
     httpServer.listen(options.port)
     print ("Listening on port:", options.port)
