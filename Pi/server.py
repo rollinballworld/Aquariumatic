@@ -15,7 +15,7 @@ class IndexHandler(tornado.web.RequestHandler):
 
 class TankHandler(tornado.web.RequestHandler):
     def get(self, input):
-        self.render('tank.html', test="Test return from server")
+        self.render('tank.html', test1="100 Degrees C", test2="14.0")
 
     def post(self, input):
         aquarium_id = input
