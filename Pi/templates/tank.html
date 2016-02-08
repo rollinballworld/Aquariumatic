@@ -1,6 +1,5 @@
 <html>
 <head>
-<script src="{{ static_url('scripts/test.js') }}" type="application/javascript"></script>
 </head>
 <body>
 <form action="" method="post">
@@ -19,21 +18,15 @@
     <button>Update temperature Threshold</button>
 </form>
 <form>
-    <input type="button" onclick="show_test()" value="Test Button" />
-        <script type="application/javascript">
-            set_test("{{test}}");
-        </script>
-    <div id="status"></div>
-</form>
-<form>
     <p>Currently your aquarium is healthy</p>
     <div id="TempDiv"></div>
     <div id="pHDiv"></div>
     <div id="LightDiv"></div>
     <script type="application/javascript">
-        document.getElementById("TempDiv").innerHTML = "The temperature is:" & "{{test}}";
-        document.getElementById("pHDiv").innerHTML = "The pH reading is:";
-        document.getElementById("LightDiv").innerHTML = "The Lights are currently:";
+        var myvar1="{{ test1 }}"
+        myvar2="{{ test2 }}";
+        document.getElementById("TempDiv").innerHTML = "The temperature is: " + myvar1;
+        document.getElementById("pHDiv").innerHTML = "The pH value is: " + myvar2;
     </script> 
 
 </form>
