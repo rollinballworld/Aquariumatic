@@ -24,7 +24,19 @@
             set_test("{{test}}");
         </script>
     <div id="status"></div>
-    
 </form>
+<form>
+    <p>Currently your aquarium is healthy</p>
+    <div id="TempDiv"></div>
+    <div id="pHDiv"></div>
+    <div id="LightDiv"></div>
+    <script>
+        document.getElementById("TempDiv").innerHTML = "The temperature is:";
+        document.getElementById("pHDiv").innerHTML = "The pH reading is:";
+        document.getElementById("LightDiv").innerHTML = "The Lights are currently:";
+    </script> 
+
+</form>
+
 </body>
 </html>
