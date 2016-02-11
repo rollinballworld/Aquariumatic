@@ -11,9 +11,16 @@ def i2cList():
 
 def getValues(address):
   # request values from i2c address provided and write it to csv file
+  return values
   
-def main():
-  #for each address in addreslist:
-    getValues(address)
+def RetrieveData(address):
+  #read last line of [address].csv
+  #use this data to populate the web page
+  
+def main(): #to automate and run every few minutes - use a cron job?
+  for each address in i2clist():
+    ToWrite = getValues(address)
+    #Then write values to a csv file called [address].csv
+    writevalues(address, ToWrite)
     
     
