@@ -3,6 +3,7 @@ import tornado.httpserver
 import tornado.ioloop
 import tornado.options
 import tornado.web
+import json
 
 from tornado.options import define, options
 define("port", default=8000, help="run on the given port", type=int)
@@ -23,32 +24,44 @@ class TankHandler(tornado.web.RequestHandler):
         lighting = self.get_argument('Light', '')
         mintemp_data = self.get_argument('MinTemp', '')
         maxtemp_data = self.get_argument('MaxTemp', '')
+        UpdateRequest = self.get_argument('UpdateValues', '')
 
         if heater == 'ON':
             #turn relay on for heating on that particular tank
             #self.write('switching relay ON')
-            self.finish(json.dumps({"msg":"heater ON"}))
+            self.write(json.dumps({"msg":"heater ON"}))
+            return
         elif heater == 'OFF':
             #turn relay off for heating on that particular tank
-            self.finish(json.dumps({"msg":"heater OFF"}))
+            self.write(json.dumps({"msg":"heater OFF"}))
+            return
         else:
             #No action Required
             #self.write('parameter not defined for heating')
             x=1
 
         if lighting == '1':
-            self.finish(json.dumps({"msg":"Toggle Front light"}))
+            self.write(json.dumps({"msg":"Toggle Front light"}))
+            return
         elif lighting == '2':
-            self.finish(json.dumps({"msg":"Toggle Back light"}))
+            self.write(json.dumps({"msg":"Toggle Back light"}))
+            return
         elif lighting == '3':
-            self.finish(json.dumps({"msg":"Toggle Top light"}))
+            self.write(json.dumps({"msg":"Toggle Top light"}))
+            return
         else:
             #No action Required
             #self.write('parameter not defined for heating')
             x=2
 
-        login_response = 'Min temp threshold: ' + mintemp_data + ', Max temp threshold: ' + maxtemp_data
-        self.finish(json.dumps({"msg": + aquarium_id + ": " + login_response}))
+        update_response = {}
+        update_response['TankNo'] = aquarium_id
+        update_response['TempValue'] = '50 Degrees C'
+        update_response['pHValue'] = '7.0'
+
+        #login_response = 'Min temp threshold: ' + mintemp_data + ', Max temp threshold: ' + maxtemp_data
+        #self.write(json.dumps({"msg": aquarium_id + ": " + login_response}))
+        self.write(json.dumps(update_response))
 
 
 class TestHandler(tornado.web.RequestHandler):
@@ -74,8 +87,7 @@ class TestHandler(tornado.web.RequestHandler):
         print('Response to return')
 
         pprint.pprint(response_to_send)
-
-        self.write(json.dumps(response_to_send)
+        self.write(json.dumps(response_to_send))
 
 if __name__ == "__main__":
     tornado.options.parse_command_line()
