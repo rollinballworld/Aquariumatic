@@ -50,11 +50,39 @@ class TankHandler(tornado.web.RequestHandler):
         login_response = 'Min temp threshold: ' + mintemp_data + ', Max temp threshold: ' + maxtemp_data
         self.finish("Aquarium Number:" + aquarium_id + " " + login_response)
 
+
+class TestHandler(tornado.web.RequestHandler):
+    def get(self):
+        example_response = {}
+        example_response['name'] = 'example'
+        example_response['width'] = 1020
+
+        self.write(json.dumps(example_response))
+
+
+    def post(self):
+        json_obj = json_decode(self.request.body)
+        print('Post data received')
+
+        for key in list(json_obj.keys()):
+            print('key: %s , value: %s' % (key, json_obj[key]))
+
+        # new dictionary
+        response_to_send = {}
+        response_to_send['newkey'] = json_obj['key1']
+
+        print('Response to return')
+
+        pprint.pprint(response_to_send)
+
+        self.write(json.dumps(response_to_send)
+
 if __name__ == "__main__":
     tornado.options.parse_command_line()
     app = tornado.web.Application(
         handlers=[
             (r"/", IndexHandler),
+            (r"/test", TestHandler),
             (r"/aquarium(\d+)", TankHandler)],
             static_path=os.path.join(os.path.dirname(__file__), "static"),
             template_path=os.path.join(os.path.dirname(__file__), "templates"))
