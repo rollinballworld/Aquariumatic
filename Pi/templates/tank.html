@@ -21,6 +21,11 @@
         alert("update requested");
       });
     });
+    success: function(data){
+    $('#results').append(
+        '<p>Message response: '+data['msg']+'</p>';
+      );
+    };
   </script>
 </head>
 <body>
@@ -50,5 +55,6 @@
 </script> 
 <p></p>
 <button id="update_status" name="UpdateButton">Check my tank</button>
+<div id="results"></div>
 </body>
 </html>
