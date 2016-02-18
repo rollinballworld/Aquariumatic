@@ -4,19 +4,22 @@
   <title>Aquariumatic</title>
   <script src="js/jquery-2.2.0.min.js"></script>
   <script>
-    $("#heating_on, #heating_off").click(function() {
+    $("#heating_on, #heating_off").click(function(h) {
+      e.preventDefault();
       var heating_value = $(this).val();
       $.post("server.py", {"command":"Heating", "value":heating_value}, function(data) {
         alert("after heating post");  					
       });
     });
-    $("#light_1, #light_2, #light_3").click(function() {
+    $("#light_1, #light_2, #light_3").click(function(l) {
+      l.preventDefault();
       var light_value = $(this).val();
       $.post("server.py", {"command":"Light", "value":light_value}, function(data) {
         alert("after light post");
       });
     });
-    $("#update_status").click(function() {
+    $("#update_status").click(function(u) {
+      u.preventDefault();
     $.post("server.py", {"command":"UpdateValues", "value":true}, function(data) {
         alert("update requested");
       });
