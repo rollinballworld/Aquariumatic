@@ -16,6 +16,11 @@
         alert("after light post");
       });
     });
+    $("#update_status").click(function() {
+    $.post("server.py", {"command":"UpdateValues", "value":true}, function(data) {
+        alert("update requested");
+      });
+    });
   </script>
 </head>
 <body>
@@ -43,5 +48,7 @@
   document.getElementById("TempDiv").innerHTML = "The temperature is: " + myvar1;
   document.getElementById("pHDiv").innerHTML = "The pH value is: " + myvar2;
 </script> 
+<p></p>
+<button id="update_status" name="UpdateButton">Check my tank</button>
 </body>
 </html>
