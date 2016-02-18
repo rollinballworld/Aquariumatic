@@ -7,7 +7,7 @@
     $("#heating_on, #heating_off").click(function() {
       var heating_value = $(this).val();
       $.post("server.py", {"command":"Heating", "value":heating_value}, function(data) {
-        alert("after heating post");
+        alert("after heating post");  					
       });
     });
     $("#light_1, #light_2, #light_3").click(function() {
@@ -21,11 +21,7 @@
         alert("update requested");
       });
     });
-    success: function(data){
-    $('#results').append(
-        '<p>Message response: '+data['msg']+'</p>';
-      );
-    };
+
   </script>
 </head>
 <body>
@@ -36,6 +32,9 @@
   <button id="light_1" name="Light" value="1">Toggle Front Light</button>
   <button id="light_2" name="Light" value="2">Toggle Light Back Light</button>
   <button id="light_3" name="Light" value="3">Toggle Top Light</button>
+<p></p>
+<button id="update_status" name="UpdateButton">Check my tank</button>
+<div id="results"></div>
 </form>
 <p></p>
 <form action="" method="post">
@@ -53,8 +52,5 @@
   document.getElementById("TempDiv").innerHTML = "The temperature is: " + myvar1;
   document.getElementById("pHDiv").innerHTML = "The pH value is: " + myvar2;
 </script> 
-<p></p>
-<button id="update_status" name="UpdateButton">Check my tank</button>
-<div id="results"></div>
 </body>
 </html>
