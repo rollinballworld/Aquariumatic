@@ -27,28 +27,28 @@ class TankHandler(tornado.web.RequestHandler):
         if heater == 'ON':
             #turn relay on for heating on that particular tank
             #self.write('switching relay ON')
-            self.finish("switching relay ON")
+            self.finish(json.dumps({"msg":"heater ON"}))
         elif heater == 'OFF':
             #turn relay off for heating on that particular tank
-            self.finish("switching relay OFF")
+            self.finish(json.dumps({"msg":"heater OFF"}))
         else:
             #No action Required
             #self.write('parameter not defined for heating')
             x=1
 
         if lighting == '1':
-            self.finish("toggle FRONT light")
+            self.finish(json.dumps({"msg":"Toggle Front light"}))
         elif lighting == '2':
-            self.finish("Toggle BACK light")
+            self.finish(json.dumps({"msg":"Toggle Back light"}))
         elif lighting == '3':
-            self.finish("Toggle TOP Light")
+            self.finish(json.dumps({"msg":"Toggle Top light"}))
         else:
             #No action Required
             #self.write('parameter not defined for heating')
             x=2
 
         login_response = 'Min temp threshold: ' + mintemp_data + ', Max temp threshold: ' + maxtemp_data
-        self.finish("Aquarium Number:" + aquarium_id + " " + login_response)
+        self.finish(json.dumps({"msg": + aquarium_id + ": " + login_response}))
 
 
 class TestHandler(tornado.web.RequestHandler):
