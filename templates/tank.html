@@ -2,26 +2,26 @@
 <html>
 <head>
   <title>Aquariumatic</title>
-  <script src="js/jquery-2.2.0.min.js"></script>
+  <script src="static/scripts/jquery-2.2.0.min.js"></script>
   <script>
     $(document).ready(function() {
       $("#heating_on, #heating_off").click(function(e) {
         e.preventDefault();
         var heating_value = $(this).val();
-        $.post("server.py", {"command":"Heating", "value":heating_value}, function(data) {
+        $.post("", {"command":"Heating", "value":heating_value}, function(data) {
           alert("after heating post");  					
         });
       });
       $("#light_1, #light_2, #light_3").click(function(e) {
         e.preventDefault();
         var light_value = $(this).val();
-        $.post("server.py", {"command":"Light", "value":light_value}, function(data) {
+        $.post("", {"command":"Light", "value":light_value}, function(data) {
           alert("after light post");
         });
       });
       $("#update_status").click(function(e) {
         e.preventDefault();
-        $.post("server.py", {"command":"UpdateValues", "value":true}, function(data) {
+        $.post("", {"command":"UpdateValues", "value":true}, function(data) {
           alert("update requested");
         });
       });
