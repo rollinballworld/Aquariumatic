@@ -97,10 +97,7 @@ if __name__ == "__main__":
             (r"/test", TestHandler),
             (r"/aquarium(\d+)", TankHandler)],
             static_path=os.path.join(os.path.dirname(__file__), "static"),
-            template_path=os.path.join(os.path.dirname(__file__), "templates"),
-            js_path=os.path.join(template_path, "js"),
-            css_path=os.path.join(template_path, "css"),
-            images_path=os.path.join(template_path, "images"))
+            template_path=os.path.join(os.path.dirname(__file__), "templates"))
 
     
     httpServer = tornado.httpserver.HTTPServer(app)
