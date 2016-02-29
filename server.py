@@ -22,14 +22,9 @@ class TankHandler(tornado.web.RequestHandler):
         aquarium_id = input
         WebCommand = self.get_argument ('command', '')
         WebValue = self.get_argument ('value', '')
-        heater = self.get_argument('Heating', '')
-        lighting = self.get_argument('Light', '')
         mintemp_data = self.get_argument('MinTemp', '')
         maxtemp_data = self.get_argument('MaxTemp', '')
-        UpdateRequest = self.get_argument('UpdateValues', '')
 
-
-        #print(WebCommand)
         if WebCommand == 'Heating':
             print(WebCommand + ": " + WebValue)
             self.write(json.dumps({"msg":"heater set to " + WebValue}))
