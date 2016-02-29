@@ -20,48 +20,37 @@ class TankHandler(tornado.web.RequestHandler):
 
     def post(self, input):
         aquarium_id = input
+        WebCommand = self.get_argument ('command', '')
+        WebValue = self.get_argument ('value', '')
         heater = self.get_argument('Heating', '')
         lighting = self.get_argument('Light', '')
         mintemp_data = self.get_argument('MinTemp', '')
         maxtemp_data = self.get_argument('MaxTemp', '')
         UpdateRequest = self.get_argument('UpdateValues', '')
 
-        if heater == 'ON':
-            #turn relay on for heating on that particular tank
-            #self.write('switching relay ON')
-            self.write(json.dumps({"msg":"heater ON"}))
+
+        #print(WebCommand)
+        if WebCommand == 'Heating':
+            print(WebCommand + ": " + WebValue)
+            self.write(json.dumps({"msg":"heater set to " + WebValue}))
             return
-        elif heater == 'OFF':
-            #turn relay off for heating on that particular tank
-            self.write(json.dumps({"msg":"heater OFF"}))
+        elif WebCommand == 'Light':
+            print(WebCommand + ": " + WebValue)
+            self.write(json.dumps({"msg":"Light " + WebValue + " toggled"}))
+            return
+        elif WebCommand == 'UpdateValues':
+            print(WebCommand + ": " + WebValue)
+            update_response = {}
+            update_response['TankNo'] = aquarium_id
+            update_response['msg'] = 'Update requested'
+            update_response['TempValue'] = '50 Degrees C'
+            update_response['pHValue'] = '7.0'
+            #print(json.dumps(update_response))
+            self.write(json.dumps(update_response))
             return
         else:
-            #No action Required
-            #self.write('parameter not defined for heating')
-            x=1
-
-        if lighting == '1':
-            self.write(json.dumps({"msg":"Toggle Front light"}))
-            return
-        elif lighting == '2':
-            self.write(json.dumps({"msg":"Toggle Back light"}))
-            return
-        elif lighting == '3':
-            self.write(json.dumps({"msg":"Toggle Top light"}))
-            return
-        else:
-            #No action Required
-            #self.write('parameter not defined for heating')
-            x=2
-
-        update_response = {}
-        update_response['TankNo'] = aquarium_id
-        update_response['TempValue'] = '50 Degrees C'
-        update_response['pHValue'] = '7.0'
-
-        #login_response = 'Min temp threshold: ' + mintemp_data + ', Max temp threshold: ' + maxtemp_data
-        #self.write(json.dumps({"msg": aquarium_id + ": " + login_response}))
-        self.write(json.dumps(update_response))
+            self.write('parameter not defined for heating')
+            
 
 
 class TestHandler(tornado.web.RequestHandler):
