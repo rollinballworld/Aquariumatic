@@ -10,7 +10,7 @@
         var heating_value = $(this).val();
         $.post("", {"command":"Heating", "value":heating_value}, function(data) {
             //alert("after heating post");
-            { $('#results').append('Update: '+data['msg'] )}
+            $('#results').html('Update: '+data['msg']);
         });
       });
       $("#light_1, #light_2, #light_3").click(function(e) {
@@ -18,19 +18,19 @@
         var light_value = $(this).val();
         $.post("", {"command":"Light", "value":light_value}, function(data) {
             //alert("after light post");
-            { $('#results').append('Update: '+data['msg'] )}
+            $('#results').html('Update: '+data['msg']);
         });
       });
       $("#update_status").click(function(e) {
         e.preventDefault();
         $.post("", {"command":"UpdateValues", "value":true}, function(data) {
             //alert("update requested");//
-            { $('#results').append('Update: ' +data['msg'] )}
-            { $('#TempDiv').append('The temperature is: ' +data['TempValue'] )}
-            { $('#pHDiv').append('The pH value is: ' +data['pHValue'] )}
+            $('#results').html('Update: ' +data['msg']);
+            $('#TempDiv').html('The temperature is: ' +data['TempValue']);
+            $('#pHDiv').html('The pH value is: ' +data['pHValue']);
+        });
       });
     });
-});
 </script>
 </head>
 <body>
