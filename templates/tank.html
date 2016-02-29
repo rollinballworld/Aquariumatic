@@ -9,24 +9,29 @@
         e.preventDefault();
         var heating_value = $(this).val();
         $.post("", {"command":"Heating", "value":heating_value}, function(data) {
-            alert("after heating post");					
+            //alert("after heating post");
+            { $('#results').append('Update: '+data['msg'] )}
         });
       });
       $("#light_1, #light_2, #light_3").click(function(e) {
         e.preventDefault();
         var light_value = $(this).val();
         $.post("", {"command":"Light", "value":light_value}, function(data) {
-            alert("after light post");
+            //alert("after light post");
+            { $('#results').append('Update: '+data['msg'] )}
         });
       });
       $("#update_status").click(function(e) {
         e.preventDefault();
         $.post("", {"command":"UpdateValues", "value":true}, function(data) {
-            alert("update requested");
-        });
+            //alert("update requested");//
+            { $('#results').append('Update: ' +data['msg'] )}
+            { $('#TempDiv').append('The temperature is: ' +data['TempValue'] )}
+            { $('#pHDiv').append('The pH value is: ' +data['pHValue'] )}
       });
     });
-  </script>
+});
+</script>
 </head>
 <body>
 <form>
