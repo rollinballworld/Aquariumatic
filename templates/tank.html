@@ -25,8 +25,8 @@
         e.preventDefault();
         $.post("", {"command":"UpdateValues", "value":true}, function(data) {
             //alert("update requested");//
-            $('#results').html('Update: ' +data.msg]);
-            $('#TempDiv').html('The temperature is: ' +data.TempValue]);
+            $('#results').html('Update: ' +data.msg);
+            $('#TempDiv').html('The temperature is: ' +data.TempValue);
             $('#pHDiv').html('The pH value is: ' +data.pHValue);
         });
       });
