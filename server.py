@@ -41,7 +41,6 @@ class TankHandler(tornado.web.RequestHandler):
             update_response['msg'] = 'Update requested'
             update_response['TempValue'] = '50 Degrees C'
             update_response['pHValue'] = '7.0'
-            #print(json.dumps(update_response))
             self.write(json.dumps(update_response))
             return
         else:
@@ -50,36 +49,47 @@ class TankHandler(tornado.web.RequestHandler):
 
 
 class TestHandler(tornado.web.RequestHandler):
-    def get(self):
-        example_response = {}
-        example_response['name'] = 'example'
-        example_response['width'] = 1020
+    def get(self, input):
+        self.render('aquariumatic.html')
 
-        self.write(json.dumps(example_response))
-
-
-    def post(self):
-        json_obj = json_decode(self.request.body)
-        print('Post data received')
-
-        for key in list(json_obj.keys()):
-            print('key: %s , value: %s' % (key, json_obj[key]))
-
-        # new dictionary
-        response_to_send = {}
-        response_to_send['newkey'] = json_obj['key1']
-
-        print('Response to return')
-
-        pprint.pprint(response_to_send)
-        self.write(json.dumps(response_to_send))
+    def post(self, input):
+        aquarium_id = input
+        WebCommand = self.get_argument ('command', '')
+        WebValue = self.get_argument ('value', '')
+        mintemp_data = self.get_argument('MinTemp', '')
+        maxtemp_data = self.get_argument('MaxTemp', '')
+        self.set_header('Content-Type', 'application/json; charset=UTF-8')
+        
+        if WebCommand == 'WaterChange':
+            print(WebCommand + ": " + WebValue)
+            self.write(json.dumps({"msg":"WaterChange Triggered."}))
+            return
+        elif WebCommand == 'Light':
+            print(WebCommand + ": " + WebValue)
+            self.write(json.dumps({"msg":"Light toggled"}))
+            return
+        elif WebCommand == 'Feed':
+            print(WebCommand + ": " + WebValue)
+            self.write(json.dumps({"msg":"Feeder triggered"}))
+            return        
+        elif WebCommand == 'UpdateValues':
+            print(WebCommand + ": " + WebValue)
+            update_response = {}
+            update_response['TankNo'] = aquarium_id
+            update_response['msg'] = 'Update requested'
+            update_response['TempValue'] = '50 Degrees C'
+            update_response['pHValue'] = '7.0'
+            self.write(json.dumps(update_response))
+            return
+        else:
+            self.write('parameter not defined for heating')
 
 if __name__ == "__main__":
     tornado.options.parse_command_line()
     app = tornado.web.Application(
         handlers=[
             (r"/", IndexHandler),
-            (r"/test", TestHandler),
+            (r"/test(\d+)", TestHandler),
             (r"/aquarium(\d+)", TankHandler)],
             static_path=os.path.join(os.path.dirname(__file__), "static"),
             template_path=os.path.join(os.path.dirname(__file__), "templates"))
