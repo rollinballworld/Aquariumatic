@@ -78,6 +78,7 @@ class TestHandler(tornado.web.RequestHandler):
             update_response['TankNo'] = aquarium_id
             update_response['msg'] = 'Update requested'
             update_response['TempValue'] = '50 Degrees C'
+            update_response['LightValue'] = 'ON'
             update_response['pHValue'] = '7.0'
             self.write(json.dumps(update_response))
             return
