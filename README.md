@@ -6,20 +6,6 @@ Code repository for a Pi-Arduino Aquarium Management system, by Liam O'Reilly
 
 To Do
 
-server.py
-Look at integrating a static handler for the js, css and images folders in templates. Something like:
-(r"/js/(.*)", web.StaticFileHandler, {"path": "/var/www"})
-OR - move all to static directory and amend aquariumatic.html accordingly
-
-tank.html
-amend Ajax script and add in something to append the returned data from the server:
-success: function(data)
-{
-    $('#results').append(
-        '<p>Value one: '+data['result1']+'</p><p>Value 2: '+data['result2']+'</p>';
-    );
-}
-
 data.py
 create code to poll i2c devices and save their returned data as a csv file.
 schedule this file to be ran every few minutes. The server can then read tank stats from this csv instead of direct request?
