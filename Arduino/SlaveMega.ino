@@ -1,11 +1,43 @@
 #include <Wire.h>
+//include OneWire for temp probe
+//include library for pH probe
+//include library for lcd screen
 
 char x = "";
 
-// function that executes whenever data is received from master
-// this function is registered as an event, see setup()
+/* Define all pins here for relays, probes and screen*/
+
+
+void setup() {
+  // setup relay pins as outputs here:
+  //setup screen pins here
+  //setup probe pins
+
+  Wire.begin(10);                // join i2c bus with slave address #10
+  Wire.onReceive(receiveEvent);
+  Wire.onRequest(requestEvent);
+}
+
+void loop(){
+  //Check ph
+  //check temp
+  //write to screen
+  //check for incoming i2c commands
+}
+
+void Heating(string state){
+ //handle heating relays 
+}
+
+void Lighting(int light){
+ //handle light relays 
+}
+
+
 void receiveEvent(int howMany)
 {
+  // function that executes whenever data is received from master
+  // this function is registered as an event, see setup()
   x = "";
   while( Wire.available()){
     x += (char)Wire.read();
@@ -29,25 +61,4 @@ void do_command(char x) {
     case 'Lighting3': Lighting(3); break;
     default: break;
   }
-  
-}
-
-void setup() {
-  // setup relay pins here:
-
-  Wire.begin(15);                // join i2c bus with address #4
-  Wire.onReceive(receiveEvent);
-  Wire.onRequest(requestEvent);
-}
-
-void loop(){
-  //Check ph and Temp here
-}
-
-void Heating(string state){
- //handle heating relays 
-}
-
-void Lighting(int light){
- //handle light relays 
 }
