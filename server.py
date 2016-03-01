@@ -24,7 +24,8 @@ class TankHandler(tornado.web.RequestHandler):
         WebValue = self.get_argument ('value', '')
         mintemp_data = self.get_argument('MinTemp', '')
         maxtemp_data = self.get_argument('MaxTemp', '')
-
+        self.set_header('Content-Type', 'application/json')
+        
         if WebCommand == 'Heating':
             print(WebCommand + ": " + WebValue)
             self.write(json.dumps({"msg":"heater set to " + WebValue}))
