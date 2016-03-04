@@ -27,6 +27,9 @@ LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 #define RELAY1  6                    
 #define RELAY2  7
 
+//define variables
+int incomingByte = 0;   // for incoming serial data
+
 void setup() {
  Serial.begin(9600);
   //set up the Relays as outputs
@@ -41,6 +44,7 @@ void setup() {
 }
 
 void loop() {
+ CheckSerial();
   // set the cursor to column 0, line 1
   // (note: line 1 is the second row, since counting begins with 0):
   lcd.setCursor(0, 1);
@@ -63,6 +67,18 @@ Serial.println("and to process incoming requests from the master unit.");
 Serial.println("");
 Serial.println("Currently focusing on serial communication.");
 Serial.println("i2c to follow"); 
+}
+
+void CheckSerial() {
+ if (Serial.available() > 0) {
+    incomingByte = Serial.read();
+
+
+  // say what you got:
+  Serial.print("Received: ");
+  Serial.println(incomingByte, DEC);
+  }
+   //Process incoming serial data with a switch case
 }
 
 void CurrentTemp(){
