@@ -13,7 +13,12 @@ class Aquarium(TankID):
   def SendParameter:
     pass
     
-  def GetData:
+  def CurrentReadings:
+    CurrentReadings[]
+    #write function to:
+    #send via serial command for data
+    #compile an array of returned data
+    #return array
     pass
   
   def CheckAlerts:
