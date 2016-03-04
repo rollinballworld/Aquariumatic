@@ -4,7 +4,7 @@
 #
 #add functions to deal with sending commands to the arduino, sending parameters, receiving alerts and receiving data.
 
-Class Aquarium(TankID):
+class Aquarium(TankID):
   #To fill out
 
   def SendCommand:
