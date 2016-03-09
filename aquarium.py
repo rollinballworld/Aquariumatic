@@ -5,9 +5,20 @@
 #add functions to deal with sending commands to the arduino, sending parameters, receiving alerts and receiving data.
 
 class Aquarium(AquariumNumber):
-  #To fill out
+  """
+  This class is to contain all of the Aquarium-based function for ease of use in the main script.
+  The main script can create an instance for a tank (for example Tank1=Aquarium(1) )
+  This can then set up the basics for the tank such as locating it's i2c address etc.
+  This will allow short and simple sending of data:
+  Tank1.SendCommand("test","")
+  or requesting data from the tank
+  CurrentpHValue = Tank1.CurrentReading("pH")
+  CurrentTempValue = Tank1.CurrentReading("Temp")
+  
+  One day. One day...
+  """
 
-  def SendCommand(AquariumNumber, FunctionName, FunctionValue):
+  def SendCommand(FunctionName, FunctionValue):
     #Send AquariumNumber to i2cList to have the i2c address returned
     AqAddress=i2cList(AquariumNumber)
     #Send FunctionName & FunctionValue to the returned i2c Address
@@ -18,7 +29,7 @@ class Aquarium(AquariumNumber):
       #Run normal i2c send to - TO WRITE
       pass
     
-  def SendParameter(AquariumNumber, FunctionName, MinValue, MaxValue):
+  def SendParameter(FunctionName, MinValue, MaxValue):
     #Send AquariumNumber to i2cList to have the i2c address returned
     AqAddress=i2cList(AquariumNumber)
     #Send FunctionName & FunctionValue to the returned i2c Address
@@ -29,8 +40,8 @@ class Aquarium(AquariumNumber):
       #Run normal i2c send to - TO WRITE
       pass
     
-  def CurrentReadings:
-    CurrentReadings[]
+  def CurrentReading:
+    CurrentReading[]
     #write function to:
     #send via serial command for data
     #compile an array of returned data
