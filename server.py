@@ -47,7 +47,7 @@ class TankHandler(tornado.web.RequestHandler):
             self.write(json.dumps(update_response))
             return
         else:
-            self.write('parameter not defined for heating')
+            self.write('parameter not defined')
             
 
 
@@ -86,7 +86,7 @@ class TestHandler(tornado.web.RequestHandler):
             self.write(json.dumps(update_response))
             return
         else:
-            self.write('parameter not defined for heating')
+            self.write('parameter not defined')
 
 if __name__ == "__main__":
     tornado.options.parse_command_line()
