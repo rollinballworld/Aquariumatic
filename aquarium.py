@@ -17,10 +17,12 @@ class Aquarium(AquariumNumber):
   
   One day. One day...
   """
+  def __init__(self, TankNo):
+    self.TankNo = TankNo
 
   def SendCommand(FunctionName, FunctionValue):
     #Send AquariumNumber to i2cList to have the i2c address returned
-    AqAddress=i2cList(AquariumNumber)
+    AqAddress=i2cList(self.TankNo)
     #Send FunctionName & FunctionValue to the returned i2c Address
     if FunctionName == 'test':
       #Setup a test return value
@@ -31,7 +33,7 @@ class Aquarium(AquariumNumber):
     
   def SendParameter(FunctionName, MinValue, MaxValue):
     #Send AquariumNumber to i2cList to have the i2c address returned
-    AqAddress=i2cList(AquariumNumber)
+    AqAddress=i2cList(self.TankNo)
     #Send FunctionName & FunctionValue to the returned i2c Address
     if FunctionName == 'test':
       #Setup a test return value
@@ -55,7 +57,7 @@ class Aquarium(AquariumNumber):
 def i2cList(AquariumNumber):
   #Contain a list of i2c addresses and return the appropriate address when provided with an Aquarium number
   #TO WRITE
-  ListedValue = 0x15
+  ListedValue = 0x10
   return ListedValue
 
 def Gmail(recipient, subject, body):
