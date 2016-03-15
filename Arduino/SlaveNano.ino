@@ -8,7 +8,6 @@
 Script to be ran on my test Nano, with lcd screen and two relays.
 The sensor data will be simulated; every time pH/Temp/Light status is requested 
 they will step through a series of values to show change.
-
  Screen connection:
  * LCD RS pin to digital pin 12
  * LCD Enable pin to digital pin 11
@@ -32,8 +31,8 @@ LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 #define RELAY2  7
 
 //define variables
-int incomingByte = 0;   // for incoming serial data
-char x = "";    // for incoming i2c data
+String stri2c = "";     // for incoming i2c data
+String strSerial = "";  // for incoming serial data
 
 void setup() {
  Serial.begin(9600);
@@ -59,11 +58,11 @@ void loop() {
   // (note: line 1 is the second row, since counting begins with 0):
   lcd.setCursor(0, 1);
   // print the Temperature:
-  lcd.print("Temp: " & CurrentTemp());
+  lcd.print("Temp: " && CurrentTemp());
   delay(2000);
   lcd.setCursor(0, 1);
   // print the pH
-  lcd.print("Temp: " & CurrentpH());
+  lcd.print("Temp: " && CurrentpH());
   delay(2000);
 }
 
@@ -71,30 +70,44 @@ void receiveEvent(int howMany)
 {
   // function that executes whenever data is received from master
   // this function is registered as an event, see setup()
-  x = "";
+  stri2c = "";
   while( Wire.available()){
-    x += (char)Wire.read();
+    //x += (char)Wire.read();
+    stri2c += Wire.readString();
   }
-  do_command(x);
+  do_command(stri2c);
 }
 
 void requestEvent()
 {
   //Return temp and pH Readings as a char
   //Collect data as a string then convert using c_str
-  Wire.write(data.c_str());
+  //Wire.write(data.c_str());
 }
 
-void do_command(char x) {
-  switch(x) {
-    case 'HeatingOn': ToggleRelay(RELAY1); break;
-    case 'HeatingOff':ToggleRelay(RELAY1); break;
-    case 'Lighting1': ToggleRelay(RELAY2); break;
-    case 'Lighting2': ToggleRelay(RELAY2); break;
-    case 'Lighting3': ToggleRelay(RELAY2); break;
-    case 'CurrentTemp': CurrentTemp(); break;
-    case 'CurrentpH': CurrentpH(); break;
-    default: break;
+void do_command(String x) {
+  if (x == "HeatingOn"){
+    ToggleRelay(RELAY1);
+  }
+  else if (x == "HeatingOff"){
+    ToggleRelay(RELAY1);
+  }
+  else if (x == "Lighting1"){
+    ToggleRelay(RELAY2);
+  }
+  else if (x == "Lighting2"){
+    ToggleRelay(RELAY2);
+  }
+  else if (x == "Lighting3"){
+    ToggleRelay(RELAY2);
+  }
+  else if (x == "CurrentTemp"){
+    CurrentTemp();
+  }
+  else if (x == "CurrentpH"){
+    CurrentpH();
+  }
+  else{
   }
 }
 
@@ -111,31 +124,34 @@ Serial.println("i2c to follow");
 }
 
 void CheckSerial() {
- if (Serial.available() > 0) {
-    incomingByte = Serial.read();
-
-  // say what you got:
-  Serial.print("Received: ");
-  Serial.println(incomingByte, DEC);
+  strSerial = "";
+  while(Serial.available()){
+   strSerial += Serial.readString();
   }
-   do_command(incomingByte);
+  Serial.print("Received: ");
+  Serial.println(strSerial);
+  do_command(strSerial);
 }
 
-void CurrentTemp(){
+float CurrentTemp(){
  //to write code to simulate changing values
  return 45;
 }
 
-void CurrentpH(){
+float CurrentpH(){
  //to write code to simulate changing values
  return 7.0;
 }
 
 void ToggleRelay(char RelayNo) {
-    if (digitalRead (RelayNo) == LOW)
+    if (digitalRead (RelayNo) == LOW){
       digitalWrite (RelayNo, HIGH);
-      Serial.print(RelayNo & " toggled ON");
-    else
+      Serial.print(RelayNo);
+      Serial.println(" toggled ON");
+    }
+    else{
       digitalWrite (RelayNo, LOW);
-      Serial.print(RelayNo & " toggled OFF");
+      Serial.print(RelayNo);
+      Serial.println(" toggled OFF");
+    }
 }
