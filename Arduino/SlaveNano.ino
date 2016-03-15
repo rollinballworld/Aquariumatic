@@ -1,4 +1,8 @@
 #include <LiquidCrystal.h>
+#include <Wire.h>
+//include OneWire for temp probe
+//include library for pH probe
+//include library for lcd screen
 
 /*AQUARIUMATIC TEST SKETCH
 Script to be ran on my test Nano, with lcd screen and two relays.
@@ -29,12 +33,18 @@ LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 
 //define variables
 int incomingByte = 0;   // for incoming serial data
+char x = "";    // for incoming i2c data
 
 void setup() {
  Serial.begin(9600);
   //set up the Relays as outputs
   pinMode(RELAY1, OUTPUT);
   pinMode(RELAY2, OUTPUT);
+  
+  // join i2c bus with slave address #10
+  Wire.begin(10);                
+  Wire.onReceive(receiveEvent);
+  Wire.onRequest(requestEvent);
   
   // set up the LCD's number of columns and rows:
   lcd.begin(16, 2);
@@ -57,6 +67,37 @@ void loop() {
   delay(2000);
 }
 
+void receiveEvent(int howMany)
+{
+  // function that executes whenever data is received from master
+  // this function is registered as an event, see setup()
+  x = "";
+  while( Wire.available()){
+    x += (char)Wire.read();
+  }
+  do_command(x);
+}
+
+void requestEvent()
+{
+  //Return temp and pH Readings as a char
+  //Collect data as a string then convert using c_str
+  Wire.write(data.c_str());
+}
+
+void do_command(char x) {
+  switch(x) {
+    case 'HeatingOn': ToggleRelay(RELAY1); break;
+    case 'HeatingOff':ToggleRelay(RELAY1); break;
+    case 'Lighting1': ToggleRelay(RELAY2); break;
+    case 'Lighting2': ToggleRelay(RELAY2); break;
+    case 'Lighting3': ToggleRelay(RELAY2); break;
+    case 'CurrentTemp': CurrentTemp(); break;
+    case 'CurrentpH': CurrentpH(); break;
+    default: break;
+  }
+}
+
 void startupinfo(){
 Serial.println("Aquariumatic Test Unit");
 Serial.println("");
@@ -73,12 +114,11 @@ void CheckSerial() {
  if (Serial.available() > 0) {
     incomingByte = Serial.read();
 
-
   // say what you got:
   Serial.print("Received: ");
   Serial.println(incomingByte, DEC);
   }
-   //Process incoming serial data with a switch case
+   do_command(incomingByte);
 }
 
 void CurrentTemp(){
@@ -91,7 +131,7 @@ void CurrentpH(){
  return 7.0;
 }
 
-void ToggleRelay(RelayNo) {
+void ToggleRelay(char RelayNo) {
     if (digitalRead (RelayNo) == LOW)
       digitalWrite (RelayNo, HIGH);
       Serial.print(RelayNo & " toggled ON");
