@@ -92,13 +92,16 @@ void do_command(String x) {
   else if (x == "HeatingOff"){
     ToggleRelay(RELAY1);
   }
-  else if (x == "Lighting1"){
+  else if (x == "LightOn"){
     ToggleRelay(RELAY2);
   }
-  else if (x == "Lighting2"){
+  else if (x == "LightOff"){
     ToggleRelay(RELAY2);
   }
-  else if (x == "Lighting3"){
+  else if (x == "PumpOn"){
+    ToggleRelay(RELAY2);
+  }
+  else if (x == "PumpOff"){
     ToggleRelay(RELAY2);
   }
   else if (x == "CurrentTemp"){
