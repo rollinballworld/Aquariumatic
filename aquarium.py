@@ -60,7 +60,7 @@ def i2cList(AquariumNumber):
   ListedValue = 0x10
   return ListedValue
 
-def Gmail(recipient, subject, body):
+def SendEmail(recipient, subject, body):
     import smtplib
 
     gmail_user = "aquariumatic@gmail.com"
