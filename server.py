@@ -31,11 +31,18 @@ class TankHandler(tornado.web.RequestHandler):
         
         if WebCommand == 'Heating':
             print(WebCommand + ": " + WebValue)
+            aquarium.SendCommand('test','')
             self.write(json.dumps({"msg":"heater set to " + WebValue}))
             return
         elif WebCommand == 'Light':
             print(WebCommand + ": " + WebValue)
-            self.write(json.dumps({"msg":"Light " + WebValue + " toggled"}))
+            aquarium.SendCommand('test','')
+            self.write(json.dumps({"msg":"lights set to " + WebValue}))
+            return
+        elif WebCommand == 'Pump':
+            print(WebCommand + ": " + WebValue)
+            aquarium.SendCommand('test','')
+            self.write(json.dumps({"msg":"water pump set to " + WebValue}))
             return
         elif WebCommand == 'UpdateValues':
             print(WebCommand + ": " + WebValue)
