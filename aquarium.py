@@ -1,3 +1,6 @@
+# for RPI version 1, use "bus = smbus.SMBus(0)"
+#bus = smbus.SMBus(1)
+import serial
 #To replace the functions and data python scripts.
 #Create and aquarium class which gathers the current sonsor data from the tank's 
 #arduino (ID nubmer to be provided, i2c address to be found)
@@ -19,8 +22,9 @@ class Aquarium(AquariumNumber):
   """
   def __init__(self, TankNo):
     self.TankNo = TankNo
+    ser = serial.Serial(port='/dev/ttyUSB0', baudrate = 9600)
 
-  def SendCommand(FunctionName, FunctionValue):
+  def SendCommand(self, FunctionName, FunctionValue):
     #Send AquariumNumber to i2cList to have the i2c address returned
     AqAddress=i2cList(self.TankNo)
     #Send FunctionName & FunctionValue to the returned i2c Address
@@ -29,9 +33,10 @@ class Aquarium(AquariumNumber):
       print("Test Script receipt")
     else:
       #Run normal i2c send to - TO WRITE
-      pass
+      ser.write(FunctionName & FunctionValue)
+      #pass
     
-  def SendParameter(FunctionName, MinValue, MaxValue):
+  def SendParameter(self, FunctionName, MinValue, MaxValue):
     #Send AquariumNumber to i2cList to have the i2c address returned
     AqAddress=i2cList(self.TankNo)
     #Send FunctionName & FunctionValue to the returned i2c Address
@@ -40,9 +45,10 @@ class Aquarium(AquariumNumber):
       print("Test Script receipt")
     else:
       #Run normal i2c send to - TO WRITE
-      pass
+      ser.write(FunctionName && MinValue && MxValue)
+      #pass
     
-  def CurrentReading:
+  def CurrentReading(self):
     CurrentReading[]
     #write function to:
     #send via serial command for data
@@ -54,13 +60,13 @@ class Aquarium(AquariumNumber):
     pass
 
 
-def i2cList(AquariumNumber):
+def i2cList(self, AquariumNumber):
   #Contain a list of i2c addresses and return the appropriate address when provided with an Aquarium number
   #TO WRITE
   ListedValue = 0x10
   return ListedValue
 
-def SendEmail(recipient, subject, body):
+def SendEmail(self, recipient, subject, body):
     import smtplib
 
     gmail_user = "aquariumatic@gmail.com"
