@@ -33,28 +33,30 @@ class TankHandler(tornado.web.RequestHandler):
         
         if WebCommand == 'Heating':
             print(WebCommand + ": " + WebValue)
-            aquarium.SendCommand('test','')
+            aquarium.SendCommand(WebCommand, WebValue)
             self.write(json.dumps({"msg":"heater set to " + WebValue}))
             return
         elif WebCommand == 'Light':
             print(WebCommand + ": " + WebValue)
-            aquarium.SendCommand('test','')
+            aquarium.SendCommand(WebCommand, WebValue)
             self.write(json.dumps({"msg":"lights set to " + WebValue}))
             return
         elif WebCommand == 'Pump':
             print(WebCommand + ": " + WebValue)
-            aquarium.SendCommand('test','')
+            aquarium.SendCommand(WebCommand, WebValue)
             self.write(json.dumps({"msg":"water pump set to " + WebValue}))
             return
         elif WebCommand == 'UpdateValues':
             print(WebCommand + ": " + WebValue)
+            aquarium.SendParameter(mintemp_data, maxtemp_data, minph_data, maxph_data)
+            aquarium.SendCommand(WebCommand, WebValue)
             update_response = {}
             update_response['TankNo'] = aquarium_id
             update_response['msg'] = 'Update requested'
-            update_response['TempValue'] = '50 Degrees C'
-            update_response['pHValue'] = '7.0'
-            update_response['LightValue'] = 'ON'
-            update_response['PumpValue'] = 'OFF'
+            update_response['TempValue'] = aquarium.CurrentReading('Temp')
+            update_response['pHValue'] = aquarium.CurrentReading('ph')
+            update_response['LightValue'] = aquarium.CurrentReading('Light')
+            update_response['PumpValue'] = aquarium.CurrentReading('pump')
             self.write(json.dumps(update_response))
             return
         else:
