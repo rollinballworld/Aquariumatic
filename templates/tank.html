@@ -23,7 +23,7 @@
       });
       $("#pump_on, #pump_off").click(function(e) {
         e.preventDefault();
-        var light_value = $(this).val();
+        var pump_value = $(this).val();
         $.post("", {"command":"Pump", "value":light_value}, function(data) {
             //alert("after light post");
             $('#results').html('Update: '+data.msg);
