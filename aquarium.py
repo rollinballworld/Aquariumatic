@@ -48,12 +48,21 @@ class Aquarium(AquariumNumber):
       ser.write(NewMinTemp, NewMaxTemp, NewMinpH, NewMaxpH)
       #pass
     
-  def CurrentReading(self):
+  def CurrentReading(self, requested):
     CurrentReading[]
-    #write function to:
-    #send via serial command for data
-    #compile an array of returned data
-    #return array
+    #CurrentValues = ser.read()
+    
+    if requested == 'Temp':
+      #return Temp
+      pass
+    elif requested == 'pH':
+      #return pH value
+      pass
+    elif requested == 'Light':
+      #Return light status
+      pass
+    elif requested == 'Pump':
+    #return Pump status
     pass
   
   def CheckAlerts:
