@@ -36,16 +36,16 @@ class Aquarium(AquariumNumber):
       ser.write(FunctionName & FunctionValue)
       #pass
     
-  def SendParameter(self, FunctionName, MinValue, MaxValue):
+  def SendParameter(self, NewMinTemp, NewMaxTemp, NewMinpH, NewMaxpH):
     #Send AquariumNumber to i2cList to have the i2c address returned
     AqAddress=i2cList(self.TankNo)
     #Send FunctionName & FunctionValue to the returned i2c Address
-    if FunctionName == 'test':
+    if NewMinTemp == 'test':
       #Setup a test return value
       print("Test Script receipt")
     else:
       #Run normal i2c send to - TO WRITE
-      ser.write(FunctionName && MinValue && MxValue)
+      ser.write(NewMinTemp, NewMaxTemp, NewMinpH, NewMaxpH)
       #pass
     
   def CurrentReading(self):
