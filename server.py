@@ -25,6 +25,8 @@ class TankHandler(tornado.web.RequestHandler):
         WebValue = self.get_argument ('value', '')
         mintemp_data = self.get_argument('MinTemp', '')
         maxtemp_data = self.get_argument('MaxTemp', '')
+        minph_data = self.get_argument('Minph', '')
+        maxph_data = self.get_argument('Maxph', '')
         self.set_header('Content-Type', 'application/json; charset=UTF-8')
         
         aquarium = Aquarium(aquarium_id)
@@ -51,6 +53,8 @@ class TankHandler(tornado.web.RequestHandler):
             update_response['msg'] = 'Update requested'
             update_response['TempValue'] = '50 Degrees C'
             update_response['pHValue'] = '7.0'
+            update_response['LightValue'] = 'ON'
+            update_response['PumpValue'] = 'OFF'
             self.write(json.dumps(update_response))
             return
         else:
