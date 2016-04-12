@@ -110,6 +110,12 @@ void do_command(String x) {
   else if (x == "CurrentpH"){
     CurrentpH();
   }
+  else if (x == "CurrentLight"){
+    CurrentLight();
+  }
+  else if (x == "CurrentPump"){
+    CurrentPump();
+  }
   else{
   }
 }
@@ -144,6 +150,13 @@ float CurrentTemp(){
 float CurrentpH(){
  //to write code to simulate changing values
  return 7.0;
+}
+
+void CurrentLight(){
+ return 'OFF';
+}
+void CurrentPump(){
+ return 'ON';
 }
 
 void ToggleRelay(char RelayNo) {
