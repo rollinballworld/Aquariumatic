@@ -1,8 +1,8 @@
+//Required Libraries
 #include <LiquidCrystal.h>
 #include <Wire.h>
-//include OneWire for temp probe
-//include library for pH probe
-//include library for lcd screen
+//#include <OneWire.h>
+//#include <DallasTemperature.h>
 
 /*AQUARIUMATIC TEST SKETCH
 Script to be ran on my test Nano, with lcd screen and two relays.
@@ -29,6 +29,8 @@ LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 //Define the Relay pins
 #define RELAY1  6                    
 #define RELAY2  7
+#define RELAY3  8
+#define RELAY4  9
 
 //define variables
 String stri2c = "";     // for incoming i2c data
