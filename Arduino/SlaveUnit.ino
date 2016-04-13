@@ -41,6 +41,8 @@ void setup() {
   //set up the Relays as outputs
   pinMode(RELAY1, OUTPUT);
   pinMode(RELAY2, OUTPUT);
+  pinMode(RELAY3, OUTPUT);
+  pinMode(RELAY4, OUTPUT);
   
   // join i2c bus with slave address #10
   Wire.begin(10);                
