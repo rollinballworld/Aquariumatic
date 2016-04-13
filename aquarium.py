@@ -7,7 +7,7 @@ import serial
 #
 #add functions to deal with sending commands to the arduino, sending parameters, receiving alerts and receiving data.
 
-class Aquarium(AquariumNumber):
+class Aquarium():
   """
   This class is to contain all of the Aquarium-based function for ease of use in the main script.
   The main script can create an instance for a tank (for example Tank1=Aquarium(1) )
@@ -20,42 +20,61 @@ class Aquarium(AquariumNumber):
   
   One day. One day...
   """
+  #Switch platforms
+  #Windows
+  ser = serial.Serial(port = '\\\\.\\COM10',baudrate = 9600)
+  #Pi/Linux
+  #ser = serial.Serial(port='/dev/ttyUSB0', baudrate = 9600)
+
   def __init__(self, TankNo):
     self.TankNo = TankNo
-    ser = serial.Serial(port='/dev/ttyUSB0', baudrate = 9600)
-
+    
   def SendCommand(self, FunctionName, FunctionValue):
     #Send AquariumNumber to i2cList to have the i2c address returned
-    AqAddress=i2cList(self.TankNo)
+    #AqAddress=i2cList(self.TankNo)
     #Send FunctionName & FunctionValue to the returned i2c Address
+    ser=self.ser
     if FunctionName == 'test':
       #Setup a test return value
       print("Test Script receipt")
     else:
       #Run normal i2c send to - TO WRITE
-      ser.write(FunctionName & FunctionValue)
+      ToSend = FunctionName + FunctionValue
+      ser.write(ToSend.encode('UTF-8'))
+      ser.close
+      print('Command Sent')
       #pass
     
   def SendParameter(self, NewMinTemp, NewMaxTemp, NewMinpH, NewMaxpH):
     #Send AquariumNumber to i2cList to have the i2c address returned
-    AqAddress=i2cList(self.TankNo)
+    #AqAddress=i2cList(self.TankNo)
+    ser=self.ser
     #Send FunctionName & FunctionValue to the returned i2c Address
     if NewMinTemp == 'test':
       #Setup a test return value
       print("Test Script receipt")
     else:
       #Run normal i2c send to - TO WRITE
-      ser.write('Parameters',NewMinTemp, NewMaxTemp, NewMinpH, NewMaxpH)
+      ser.write('Parameters'.encode('UTF-8'))
+      ser.write(str(NewMinTemp).encode('UTF-8'))
+      ser.write(str(NewMaxTemp).encode('UTF-8'))
+      ser.write(str(NewMinpH).encode('UTF-8'))
+      ser.write(str(NewMaxpH).encode('UTF-8'))
+      ser.close
+      print('Parameters Sent')
       #pass
     
   def CurrentReading(self, requested):
-    CurrentReading[]
-    ser.write('Current' & requested)
-    #CurrentValue = ser.read()
+    ser=self.ser
+    #CurrentReading[]
+    ToSend = 'Current' + requested
+    ser.write(ToSend.encode('UTF-8'))
+    CurrentValue = ser.readline()
     return CurrentValue
     pass
   
-  def CheckAlerts:
+  def CheckAlerts(self):
+    ser=self.ser
     pass
 
 
@@ -64,6 +83,7 @@ def i2cList(self, AquariumNumber):
   #TO WRITE
   ListedValue = 0x10
   return ListedValue
+
 
 def SendEmail(self, recipient, subject, body):
     import smtplib
@@ -85,6 +105,6 @@ def SendEmail(self, recipient, subject, body):
         server.login(gmail_user, gmail_pwd)
         server.sendmail(FROM, TO, message)
         server.close()
-        print 'successfully sent the mail'
+        print ('successfully sent the mail')
     except:
-        print "failed to send mail"
+        print ("failed to send mail")
