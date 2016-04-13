@@ -45,24 +45,14 @@ class Aquarium(AquariumNumber):
       print("Test Script receipt")
     else:
       #Run normal i2c send to - TO WRITE
-      ser.write(NewMinTemp, NewMaxTemp, NewMinpH, NewMaxpH)
+      ser.write('Parameters',NewMinTemp, NewMaxTemp, NewMinpH, NewMaxpH)
       #pass
     
   def CurrentReading(self, requested):
     CurrentReading[]
-    #CurrentValues = ser.read()
-    
-    if requested == 'Temp':
-      #return Temp
-      pass
-    elif requested == 'pH':
-      #return pH value
-      pass
-    elif requested == 'Light':
-      #Return light status
-      pass
-    elif requested == 'Pump':
-    #return Pump status
+    ser.write('Current' & requested)
+    #CurrentValue = ser.read()
+    return CurrentValue
     pass
   
   def CheckAlerts:
