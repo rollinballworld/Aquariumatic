@@ -24,8 +24,8 @@
       $("#pump_on, #pump_off").click(function(e) {
         e.preventDefault();
         var pump_value = $(this).val();
-        $.post("", {"command":"Pump", "value":light_value}, function(data) {
-            //alert("after light post");
+        $.post("", {"command":"Pump", "value":pump_value}, function(data) {
+            //alert("after pump post");
             $('#results').html('Update: '+data.msg);
         });
       });
