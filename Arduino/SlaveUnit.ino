@@ -1,8 +1,8 @@
 //Required Libraries
 #include <LiquidCrystal.h>
 #include <Wire.h>
-//#include <OneWire.h>
-//#include <DallasTemperature.h>
+#include <OneWire.h>
+#include <DallasTemperature.h>
 
 /*AQUARIUMATIC TEST SKETCH
 Script to be ran on my test Nano, with lcd screen and two relays.
@@ -27,10 +27,17 @@ they will step through a series of values to show change.
 LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 
 //Define the Relay pins
-#define RELAY1  6                    
-#define RELAY2  7
-#define RELAY3  8
-#define RELAY4  9
+#define BLPin   6   //Backlight Pin
+#define RELAY1  7                    
+#define RELAY2  8
+#define RELAY3  9
+#define RELAY4  10
+#define SensorPin A0
+#define TempPin A1  //Change to Digital? Add 4.7k resistor between 5v and TempPin
+
+OneWire oneWire(TempPin);
+DallasTemperature sensors(&oneWire); 
+DeviceAddress insideThermometer = { 0x28, 0xB4, 0x6B, 0xC8, 0x04, 0x00, 0x00, 0x1F };     // Assign the addresses of your 1-Wire temp sensors.
 
 //define variables
 String stri2c = "";     // for incoming i2c data
@@ -38,7 +45,11 @@ String strSerial = "";  // for incoming serial data
 
 void setup() {
  Serial.begin(9600);
+ sensors.begin();            //start up temp probe library
+ sensors.setResolution(insideThermometer, 10);       // set the temp probe resolution to 10 bit
+
   //set up the Relays as outputs
+  pinMode(BLPin, OUTPUT);
   pinMode(RELAY1, OUTPUT);
   pinMode(RELAY2, OUTPUT);
   pinMode(RELAY3, OUTPUT);
@@ -51,10 +62,13 @@ void setup() {
   
   // set up the LCD's number of columns and rows:
   lcd.begin(16, 2);
+  //Switch on Backlight
+  digitalWrite (BLPin, HIGH);
   // Print a message to the LCD.
   lcd.print("Aquariumatic v1");
   startupinfo();
 }
+
 
 void loop() {
  CheckSerial();
@@ -62,11 +76,13 @@ void loop() {
   // (note: line 1 is the second row, since counting begins with 0):
   lcd.setCursor(0, 1);
   // print the Temperature:
-  lcd.print("Temp: " && CurrentTemp());
+  //lcd.print("Temp: " && CurrentTemp());
+  lcd.print("Temp Value");
   delay(2000);
-  lcd.setCursor(0, 1);
+  lcd.setCursor(0,1);
   // print the pH
-  lcd.print("Temp: " && CurrentpH());
+  //lcd.print("pH: " && CurrentpH());
+  lcd.print("pH Value       ");
   delay(2000);
 }
 
@@ -148,7 +164,9 @@ void CheckSerial() {
 
 float CurrentTemp(){
  //to write code to simulate changing values
- return 45;
+ sensors.requestTemperatures();
+ float tempC = sensors.getTempC(insideThermometer);
+ return tempC;
 }
 
 float CurrentpH(){
@@ -156,10 +174,10 @@ float CurrentpH(){
  return 7.0;
 }
 
-void CurrentLight(){
+float CurrentLight(){
  return 'OFF';
 }
-void CurrentPump(){
+float CurrentPump(){
  return 'ON';
 }
 
