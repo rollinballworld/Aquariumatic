@@ -20,11 +20,12 @@ class Aquarium():
   
   One day. One day...
   """
-  #Switch platforms
-  #Windows
-  ser = serial.Serial(port = '\\\\.\\COM10',baudrate = 9600)
-  #Pi/Linux
-  #ser = serial.Serial(port='/dev/ttyUSB0', baudrate = 9600)
+  #define serial port. Try Windows COM port first.
+  #On Error try Linux Port
+  try:
+    ser = serial.Serial(port = '\\\\.\\COM10',baudrate = 9600)
+  except:
+    ser = serial.Serial(port='/dev/ttyUSB0', baudrate = 9600)
 
   def __init__(self, TankNo):
     self.TankNo = TankNo
