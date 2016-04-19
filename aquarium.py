@@ -71,7 +71,7 @@ class Aquarium():
     ToSend = 'Current' + requested
     ser.write(ToSend.encode('UTF-8'))
     CurrentValue = ser.readline()
-    return CurrentValue
+    return str(CurrentValue)
     pass
   
   def CheckAlerts(self):
