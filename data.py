@@ -38,4 +38,3 @@ def main(): #to automate and run every few minutes - use a cron job?
     #Then write values to a csv file called [address].csv
     writevalues(address, ToWrite)
     
-    
