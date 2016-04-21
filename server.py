@@ -4,6 +4,7 @@ import tornado.ioloop
 import tornado.options
 import tornado.web
 import json
+import time
 from aquarium import *
 
 from tornado.options import define, options
@@ -17,7 +18,7 @@ class IndexHandler(tornado.web.RequestHandler):
 
 class TankHandler(tornado.web.RequestHandler):
     def get(self, input):
-        self.render('tank.html', test1="100 Degrees C", test2="14.0")
+        self.render('tank.html')
 
     def post(self, input):
         aquarium_id = input
@@ -32,30 +33,30 @@ class TankHandler(tornado.web.RequestHandler):
         aquarium = Aquarium(aquarium_id)
         
         if WebCommand == 'Heating':
-            print(WebCommand + ": " + WebValue)
+            #print(WebCommand + ": " + WebValue)
             aquarium.SendCommand(WebCommand, WebValue)
-            self.write(json.dumps({"msg":"heater set to " + WebValue}))
+            self.write(json.dumps({"msg":"heater set to " + WebValue}, default=lambda x: None))
             return
         elif WebCommand == 'Light':
-            print(WebCommand + ": " + WebValue)
+            #print(WebCommand + ": " + WebValue)
             aquarium.SendCommand(WebCommand, WebValue)
-            self.write(json.dumps({"msg":"lights set to " + WebValue}))
+            self.write(json.dumps({"msg":"lights set to " + WebValue}, default=lambda x: None))
             return
         elif WebCommand == 'Pump':
-            print(WebCommand + ": " + WebValue)
+            #print(WebCommand + ": " + WebValue)
             aquarium.SendCommand(WebCommand, WebValue)
-            self.write(json.dumps({"msg":"water pump set to " + WebValue}))
+            self.write(json.dumps({"msg":"water pump set to " + WebValue}, default=lambda x: None))
             return
         elif WebCommand == 'UpdateValues':
-            print(WebCommand + ": " + WebValue)
-            aquarium.SendParameter(mintemp_data, maxtemp_data, minph_data, maxph_data)
-            aquarium.SendCommand(WebCommand, WebValue)
+            #print(WebCommand + ": " + WebValue)
+            #aquarium.SendParameter(mintemp_data, maxtemp_data, minph_data, maxph_data)
+            #aquarium.SendCommand(WebCommand, WebValue)
             update_response = {}
             update_response['TankNo'] = aquarium_id
             update_response['msg'] = 'Update requested'
-            update_response['TempValue'] = aquarium.CurrentReading('Temp')
+            update_response['TempValue'] = str(aquarium.CurrentReading('Temp'))
             update_response['pHValue'] = aquarium.CurrentReading('pH')
-            update_response['LightValue'] = aquarium.CurrentReading('Light')
+            update_response['LightValue'] = aquarium.CurrentReading('Light')          
             update_response['PumpValue'] = aquarium.CurrentReading('Pump')
             self.write(json.dumps(update_response))
             return
