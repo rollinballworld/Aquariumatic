@@ -1,6 +1,6 @@
 # for RPI version 1, use "bus = smbus.SMBus(0)"
 #bus = smbus.SMBus(1)
-import serial
+import serial, time
 #To replace the functions and data python scripts.
 #Create and aquarium class which gathers the current sonsor data from the tank's 
 #arduino (ID nubmer to be provided, i2c address to be found)
@@ -22,10 +22,17 @@ class Aquarium():
   """
   #define serial port. Try Windows COM port first.
   #On Error try Linux Port
-  try:
-    ser = serial.Serial(port = '\\\\.\\COM10',baudrate = 9600)
-  except:
-    ser = serial.Serial(port='/dev/ttyUSB0', baudrate = 9600)
+  locations=['/dev/ttyUSB0','\\\\.\\COM12']
+  for device in locations:
+    try:
+      ser = serial.Serial(port = device,baudrate = 9600, timeout = 0)
+    except:
+      print("Failed to connect on",device)
+
+  #try:
+    #ser = serial.Serial(port = '\\\\.\\COM12',baudrate = 9600, timeout = 0)
+  #except:
+    #ser = serial.Serial(port='/dev/ttyUSB0', baudrate = 9600, timeout = 0)
 
   def __init__(self, TankNo):
     self.TankNo = TankNo
@@ -35,6 +42,8 @@ class Aquarium():
     #AqAddress=i2cList(self.TankNo)
     #Send FunctionName & FunctionValue to the returned i2c Address
     ser=self.ser
+    #ser.flushInput()
+    #ser.flushOutput()
     if FunctionName == 'test':
       #Setup a test return value
       print("Test Script receipt")
@@ -42,14 +51,17 @@ class Aquarium():
       #Run normal i2c send to - TO WRITE
       ToSend = FunctionName + FunctionValue
       ser.write(ToSend.encode('UTF-8'))
+      time.sleep(.1)
       ser.close
-      print('Command Sent')
-      #pass
+      print(ToSend +' Command Sent')
+      return
     
   def SendParameter(self, NewMinTemp, NewMaxTemp, NewMinpH, NewMaxpH):
     #Send AquariumNumber to i2cList to have the i2c address returned
     #AqAddress=i2cList(self.TankNo)
     ser=self.ser
+    #ser.flushInput()
+    #ser.flushOutput()
     #Send FunctionName & FunctionValue to the returned i2c Address
     if NewMinTemp == 'test':
       #Setup a test return value
@@ -57,23 +69,26 @@ class Aquarium():
     else:
       #Run normal i2c send to - TO WRITE
       ser.write('Parameters'.encode('UTF-8'))
+      time.sleep(.1)
       ser.write(str(NewMinTemp).encode('UTF-8'))
       ser.write(str(NewMaxTemp).encode('UTF-8'))
       ser.write(str(NewMinpH).encode('UTF-8'))
       ser.write(str(NewMaxpH).encode('UTF-8'))
       ser.close
       print('Parameters Sent')
-      #pass
+      return
     
   def CurrentReading(self, requested):
     ser=self.ser
+    #ser.flushInput()
+    #ser.flushOutput()
     #CurrentReading[]
     ToSend = 'Current' + requested
     ser.write(ToSend.encode('UTF-8'))
-    CurrentValue = ser.readline()
-    return str(CurrentValue)
-    pass
-  
+    time.sleep(2)
+    return str(ser.readline())
+    ser.close
+    
   def CheckAlerts(self):
     ser=self.ser
     pass
@@ -86,8 +101,10 @@ def i2cList(self, AquariumNumber):
   return ListedValue
 
 
-def SendEmail(self, recipient, subject, body):
+def SendEmail(recipient, subject, body):
     import smtplib
+
+    user = "craighissett@gmail.com"
 
     gmail_user = "aquariumatic@gmail.com"
     gmail_pwd = "pw"
