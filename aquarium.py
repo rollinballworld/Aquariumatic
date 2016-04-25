@@ -17,8 +17,6 @@ class Aquarium():
   or requesting data from the tank
   CurrentpHValue = Tank1.CurrentReading("pH")
   CurrentTempValue = Tank1.CurrentReading("Temp")
-  
-  One day. One day...
   """
   #define serial port. Try Windows COM port first.
   #On Error try Linux Port
@@ -28,11 +26,6 @@ class Aquarium():
       ser = serial.Serial(port = device,baudrate = 9600, timeout = 0)
     except:
       print("Failed to connect on",device)
-
-  #try:
-    #ser = serial.Serial(port = '\\\\.\\COM12',baudrate = 9600, timeout = 0)
-  #except:
-    #ser = serial.Serial(port='/dev/ttyUSB0', baudrate = 9600, timeout = 0)
 
   def __init__(self, TankNo):
     self.TankNo = TankNo
@@ -86,7 +79,7 @@ class Aquarium():
     ToSend = 'Current' + requested
     ser.write(ToSend.encode('UTF-8'))
     time.sleep(2)
-    return str(ser.readline())
+    return str(ser.readline()).strip('/r/n')
     ser.close
     
   def CheckAlerts(self):
