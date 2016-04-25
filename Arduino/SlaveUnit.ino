@@ -23,13 +23,18 @@ LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 #define HeatingRelay  7                    
 #define LightRelay  8
 #define PumpRelay  9
-#define RELAY4  10
+//#define RELAY4  10 //Relay not required
+#define TempPin 10  //Change to Digital? Add 4.7k resistor between 5v and TempPin
 #define SensorPin A0
-#define TempPin A1  //Change to Digital? Add 4.7k resistor between 5v and TempPin
+#define Offset -0.08            //deviation compensate
+#define samplingInterval 20
+#define printInterval 800
+#define ArrayLenth  40    //times of collection
+int pHArray[ArrayLenth];   //Store the average value of the sensor feedback
+int pHArrayIndex=0;    
 
 OneWire oneWire(TempPin);
 DallasTemperature sensors(&oneWire); 
-DeviceAddress insideThermometer = { 0x28, 0xB4, 0x6B, 0xC8, 0x04, 0x00, 0x00, 0x1F };     // Assign the addresses of your 1-Wire temp sensors.
 
 //define variables
 String stri2c = "";     // for incoming i2c data
@@ -42,15 +47,15 @@ float MaxpH = 0;
 void setup() {
  Serial.begin(9600);
  sensors.begin();            //start up temp probe library
- sensors.setResolution(insideThermometer, 10);       // set the temp probe resolution to 10 bit
+ //sensors.setResolution(insideThermometer, 10);       // set the temp probe resolution to 10 bit
 
   //set up the Relays as outputs
   pinMode(BLPin, OUTPUT);
   pinMode(HeatingRelay, OUTPUT);
   pinMode(LightRelay, OUTPUT);
   pinMode(PumpRelay, OUTPUT);
-  pinMode(RELAY4, OUTPUT);
-  //pinMode(TempPin, INPUT);
+  //pinMode(RELAY4, OUTPUT);
+  pinMode(TempPin, INPUT);
   
   // join i2c bus with slave address #10
   Wire.begin(10);                
@@ -62,24 +67,22 @@ void setup() {
   //Switch on Backlight
   digitalWrite (BLPin, HIGH);
   // Print a message to the LCD.
+  lcd.setCursor(0,0);
   lcd.print("Aquariumatic v1");
+  lcd.setCursor(0,1);
+  lcd.print(" By L. O'Reilly ");
+  delay(2000);
   //startupinfo();
 }
 
-
 void loop() {
  CheckSerial();
-  // set the cursor to column 0, line 1
-  // (note: line 1 is the second row, since counting begins with 0):
+  // set the cursor to column 0, line 0 and print Temperature
   lcd.setCursor(0, 0);
-  // print the Temperature:
   lcd.print("Temp: " + String(CurrentTemp()) + "     ");
-  //lcd.print("Temp Value");
-
+  // set the cursor to column 0, line 0 and print pH
   lcd.setCursor(0,1);
-  // print the pH
   lcd.print("pH: " + String(CurrentpH()) + "       ");
-  //lcd.print("pH Value       ");
   delay(500);
 }
 
@@ -142,6 +145,10 @@ void do_command(String x) {
   }
   else if (x == "Parameters"){
     //MinTemp = Serial.read();
+    //MaxTemp = Serial.read();
+    //MinpH = Serial.read();
+    //MaxpH = Serial.read();
+    Serial.println("Parameters received.");
   }
   else{
     return;
@@ -162,31 +169,73 @@ Serial.println("i2c to follow");
 
 float CurrentTemp(){
  sensors.requestTemperatures();
- float tempC = sensors.getTempC(insideThermometer);
- //int tempC = analogRead(TempPin);
- return tempC;
+ float reading = sensors.getTempCByIndex(0);
+ return reading;
 }
 
 float CurrentpH(){
- //to write code to simulate changing values
- return 7.0;
+  static unsigned long samplingTime = millis();
+  static unsigned long printTime = millis();
+  static float pHValue,voltage;
+  if(millis()-samplingTime > samplingInterval)
+  {
+      pHArray[pHArrayIndex++]=analogRead(SensorPin);
+      if(pHArrayIndex==ArrayLenth)pHArrayIndex=0;
+      voltage = avergearray(pHArray, ArrayLenth)*5.0/1024;
+      pHValue = 3.5*voltage+Offset;
+      samplingTime=millis();
+  }
+  return pHValue;
 }
 
-String CurrentLight(){
- return "OFF";
-}
-String CurrentPump(){
- return "ON";
+double avergearray(int* arr, int number){
+  int i;
+  int max,min;
+  double avg;
+  long amount=0;
+  if(number<=0){
+    Serial.println("Error number for the array to avraging!/n");
+    return 0;
+  }
+  if(number<5){   //less than 5, calculated directly statistics
+    for(i=0;i<number;i++){
+      amount+=arr[i];
+    }
+    avg = amount/number;
+    return avg;
+  }else{
+    if(arr[0]<arr[1]){
+      min = arr[0];max=arr[1];
+    }
+    else{
+      min=arr[1];max=arr[0];
+    }
+    for(i=2;i<number;i++){
+      if(arr[i]<min){
+        amount+=min;        //arr<min
+        min=arr[i];
+      }else {
+        if(arr[i]>max){
+          amount+=max;    //arr>max
+          max=arr[i];
+        }else{
+          amount+=arr[i]; //min<=arr<=max
+        }
+      }//if
+    }//for
+    avg = (double)amount/(number-2);
+  }//if
+  return avg;
 }
 
 String Heating(String x){
    if (x == "on"){
       digitalWrite (HeatingRelay, HIGH);
-      //Serial.println("Heating Turned On");
+      Serial.println("Heating Turned On");
       return "";}
   else if (x == "off"){
       digitalWrite (HeatingRelay, LOW);
-      //Serial.println("Heating Turned Off");
+      Serial.println("Heating Turned Off");
       return "";}
   else if (x == "check"){
     if (digitalRead (HeatingRelay) == LOW){
