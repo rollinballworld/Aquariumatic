@@ -82,24 +82,24 @@ class AquariumaticHandler(tornado.web.RequestHandler):
         aquarium = Aquarium(aquarium_id)
         
         if WebCommand == 'Heating':
-            print(WebCommand + ": " + WebValue)
+            #print(WebCommand + ": " + WebValue)
             aquarium.SendCommand(WebCommand, WebValue)
-            self.write(json.dumps({"msg":"heater set to " + WebValue}))
+            self.write(json.dumps({"msg":"heater set to " + WebValue}, default=lambda x: None))
             return
         elif WebCommand == 'Light':
-            print(WebCommand + ": " + WebValue)
+            #print(WebCommand + ": " + WebValue)
             aquarium.SendCommand(WebCommand, WebValue)
-            self.write(json.dumps({"msg":"lights set to " + WebValue}))
+            self.write(json.dumps({"msg":"lights set to " + WebValue}, default=lambda x: None))
             return
         elif WebCommand == 'Pump':
-            print(WebCommand + ": " + WebValue)
+            #print(WebCommand + ": " + WebValue)
             aquarium.SendCommand(WebCommand, WebValue)
-            self.write(json.dumps({"msg":"water pump set to " + WebValue}))
+            self.write(json.dumps({"msg":"water pump set to " + WebValue}, default=lambda x: None))
             return
         elif WebCommand == 'UpdateValues':
-            print(WebCommand + ": " + WebValue)
-            aquarium.SendParameter(mintemp_data, maxtemp_data, minph_data, maxph_data)
-            aquarium.SendCommand(WebCommand, WebValue)
+            #print(WebCommand + ": " + WebValue)
+            #aquarium.SendParameter(mintemp_data, maxtemp_data, minph_data, maxph_data)
+            #aquarium.SendCommand(WebCommand, WebValue)
             update_response = {}
             update_response['TankNo'] = aquarium_id
             update_response['msg'] = 'Update requested'
