@@ -5,6 +5,7 @@ import tornado.options
 import tornado.web
 import json
 import time
+import system
 from aquarium import *
 
 from tornado.options import define, options
@@ -14,6 +15,21 @@ define("port", default=8000, help="run on the given port", type=int)
 class IndexHandler(tornado.web.RequestHandler):
     def get(self):
         self.render('index.html')
+    
+    def post (self):
+        WebCommand = self.get_argument ('command', '')
+        WebValue = self.get_argument ('value', '')
+        
+        if WebCommand == 'Pi':
+            if WebValue == 'shutdown':
+                os.system('shutdown now -h')
+            elif WebValue == 'reboot':
+                os.system('shutdown now -r')
+            else:
+                print('No matching Pi Command')
+                return
+        else:
+            print('Command not recognised')
 
 
 class TankHandler(tornado.web.RequestHandler):
