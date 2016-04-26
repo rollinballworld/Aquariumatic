@@ -1,6 +1,27 @@
+<!DOCTYPE html>
 <html>
+<head>
+  <title>Aquariumatic</title>
+  <script src="static/js/jquery-2.2.0.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $("#PiShutdown, #PiReboot").click(function(e) {
+        e.preventDefault();
+        var Pi_value = $(this).val();
+        $.post("", {"command":"Pi", "value":Pi_value}, function(data) {
+            //alert("after heating post");
+        });
+      });
+    });
+</script>
+</head>  
 <body>
+<h1>Aquariumatic</h1>
 Welcome to the Aquariumatic Project Home Page! </br>
-
+<form>
+  <button id="PiReboot" name="Pi" value="Reboot">Reboot Aquariumatic</button>
+  <button id="PiShutdown" name="Pi" value="Shutdown">Safely close Aquariumatic</button>
+  <p></p>
+</form>
 </body>
 </html>
