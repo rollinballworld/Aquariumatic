@@ -21,9 +21,9 @@ class IndexHandler(tornado.web.RequestHandler):
         WebValue = self.get_argument ('value', '')
         
         if WebCommand == 'Pi':
-            if WebValue == 'shutdown':
+            if WebValue == 'Shutdown':
                 os.system('shutdown now -h')
-            elif WebValue == 'reboot':
+            elif WebValue == 'Reboot':
                 os.system('shutdown now -r')
             else:
                 print('No matching Pi Command')
