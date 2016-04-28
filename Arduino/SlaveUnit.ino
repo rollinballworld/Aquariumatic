@@ -23,7 +23,7 @@ LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 #define HeatingRelay  7                    
 #define LightRelay  8
 #define PumpRelay  9
-//#define RELAY4  10 //Relay not required
+//#define RELAY4  10
 #define TempPin 10  //Change to Digital? Add 4.7k resistor between 5v and TempPin
 #define SensorPin A0
 #define Offset -0.08            //deviation compensate
@@ -39,10 +39,10 @@ DallasTemperature sensors(&oneWire);
 //define variables
 String stri2c = "";     // for incoming i2c data
 String strSerial = "";  // for incoming serial data
-float MinTemp = 0;
-float MaxTemp = 0;
-float MinpH = 0;
-float MaxpH = 0;
+float MinTemp = 20;
+float MaxTemp = 29;
+float MinpH = 5.5;
+float MaxpH = 8.5;
 
 void setup() {
  Serial.begin(9600);
@@ -77,13 +77,8 @@ void setup() {
 
 void loop() {
  CheckSerial();
-  // set the cursor to column 0, line 0 and print Temperature
-  lcd.setCursor(0, 0);
-  lcd.print("Temp: " + String(CurrentTemp()) + "     ");
-  // set the cursor to column 0, line 0 and print pH
-  lcd.setCursor(0,1);
-  lcd.print("pH: " + String(CurrentpH()) + "       ");
-  delay(500);
+ LCDUpdate();
+ delay(500);
 }
 
 void receiveEvent(int howMany){
@@ -145,9 +140,6 @@ void do_command(String x) {
   }
   else if (x == "Parameters"){
     //MinTemp = Serial.read();
-    //MaxTemp = Serial.read();
-    //MinpH = Serial.read();
-    //MaxpH = Serial.read();
     Serial.println("Parameters received.");
   }
   else{
@@ -170,6 +162,17 @@ Serial.println("i2c to follow");
 float CurrentTemp(){
  sensors.requestTemperatures();
  float reading = sensors.getTempCByIndex(0);
+ //float reading = analogRead(TempPin);
+ /*
+ // converting that reading to voltage, for 3.3v arduino use 3.3
+ float voltage = reading * 5.0;
+ voltage /= 1024.0;  
+ // Temp in Celsius
+ float tempC = (voltage - 0.5) * 100 ;
+ // Temp in Fahrenheit
+ float tempF = (tempC * 9.0 / 5.0) + 32.0;
+ 
+ return tempC;*/
  return reading;
 }
 
@@ -228,20 +231,22 @@ double avergearray(int* arr, int number){
   return avg;
 }
 
+
 String Heating(String x){
    if (x == "on"){
       digitalWrite (HeatingRelay, HIGH);
-      Serial.println("Heating Turned On");
+      //Serial.println("Heating Turned On");
       return "";}
   else if (x == "off"){
       digitalWrite (HeatingRelay, LOW);
-      Serial.println("Heating Turned Off");
+      //Serial.println("Heating Turned Off");
       return "";}
   else if (x == "check"){
     if (digitalRead (HeatingRelay) == LOW){
       return "OFF";}
       else{return "ON";}
     }
+  lcd.clear();
   }
 
 String Lights(String x){
@@ -260,6 +265,7 @@ String Lights(String x){
       return "OFF";}
     else{return "ON";}
     }
+  lcd.clear();
 }
 
 String Pump(String x){
@@ -277,5 +283,29 @@ String Pump(String x){
     if (digitalRead (PumpRelay) == LOW){
       return "OFF";}
     else{return "ON";}
-    }  
+    }
+  lcd.clear(); 
+}
+
+void LCDUpdate(){
+    // set the cursor to column 0, line 1
+  // (note: line 1 is the second row, since counting begins with 0):
+  lcd.setCursor(0, 0);
+  // print the Temperature:
+  if (CurrentTemp() > MaxTemp){
+    lcd.print("TEMP HIGH       ");}
+  else if (CurrentTemp() < MinTemp){
+    lcd.print("TEMP LOW        ");}
+  else{
+  lcd.print("Temp: " + String(CurrentTemp()) + "     ");
+  }
+  lcd.setCursor(0,1);
+  // print the pH
+  if (CurrentpH() > MaxpH){
+    lcd.print("pH HIGH         ");}
+  else if (CurrentpH() < MinpH){
+    lcd.print("pH LOW          ");}
+  else{
+  lcd.print("pH: " + String(CurrentpH()) + "       ");
+  }
 }
