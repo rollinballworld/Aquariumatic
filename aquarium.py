@@ -1,6 +1,6 @@
 # for RPI version 1, use "bus = smbus.SMBus(0)"
 #bus = smbus.SMBus(1)
-import serial, time
+import serial, time, sys
 #To replace the functions and data python scripts.
 #Create and aquarium class which gathers the current sonsor data from the tank's 
 #arduino (ID nubmer to be provided, i2c address to be found)
@@ -20,7 +20,11 @@ class Aquarium():
   """
   #define serial port. Try Windows COM port first.
   #On Error try Linux Port
-  locations=['/dev/ttyUSB0','\\\\.\\COM12']
+  if sys.platform == 'win32':
+    locations=['\\\\.\\COM12']
+  elif sys.platform == 'linux':
+    locations=['/dev/ttyUSB0']
+    
   for device in locations:
     try:
       ser = serial.Serial(port = device,baudrate = 9600, timeout = 0)
