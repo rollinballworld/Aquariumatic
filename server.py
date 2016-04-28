@@ -5,7 +5,7 @@ import tornado.options
 import tornado.web
 import json
 import time
-import os
+import os, sys
 from aquarium import *
 
 from tornado.options import define, options
@@ -22,9 +22,15 @@ class IndexHandler(tornado.web.RequestHandler):
         
         if WebCommand == 'Pi':
             if WebValue == 'Shutdown':
-                os.system('shutdown now -h')
+                if sys.platform == 'win32':
+                    os.system('shutdown /s')
+                else:
+                    os.system('shutdown -h now')
             elif WebValue == 'Reboot':
-                os.system('shutdown now -r')
+                if sys.platform == 'win32':
+                    os.system('shutdown /r')
+                else:
+                    os.system('shutdown -r now')
             else:
                 print('No matching Pi Command')
                 return
