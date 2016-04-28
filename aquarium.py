@@ -24,12 +24,15 @@ class Aquarium():
     locations=['\\\\.\\COM12']
   elif sys.platform == 'linux':
     locations=['/dev/ttyUSB0']
+  else:
+    print('Unrecognised platform. Please contact Liam for updates.')
     
   for device in locations:
     try:
       ser = serial.Serial(port = device,baudrate = 9600, timeout = 0)
     except:
       print("Failed to connect on",device)
+      time.sleep(3)
 
   def __init__(self, TankNo):
     self.TankNo = TankNo
