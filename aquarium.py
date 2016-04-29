@@ -3,7 +3,7 @@
 import serial, time, sys
 #To replace the functions and data python scripts.
 #Create and aquarium class which gathers the current sonsor data from the tank's 
-#arduino (ID nubmer to be provided, i2c address to be found)
+#arduino (ID number to be provided, i2c address to be found)
 #
 #add functions to deal with sending commands to the arduino, sending parameters, receiving alerts and receiving data.
 
@@ -86,7 +86,7 @@ class Aquarium():
     ToSend = 'Current' + requested
     ser.write(ToSend.encode('UTF-8'))
     time.sleep(2)
-    return str(ser.readline()).strip('/r/n')
+    return str(ser.readline()).rstrip()
     ser.close
     
   def CheckAlerts(self):
