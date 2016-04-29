@@ -92,7 +92,12 @@ class Aquarium():
   def CheckAlerts(self):
     ser=self.ser
     pass
-
+  
+  def ResetSlave(self):
+    ser=self.ser
+    ToSend = 'ResetSlave'
+    ser.write(ToSend.encode('UTF-8'))    
+    ser.close
 
 def i2cList(self, AquariumNumber):
   #Contain a list of i2c addresses and return the appropriate address when provided with an Aquarium number
