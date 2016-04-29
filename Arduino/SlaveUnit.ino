@@ -170,17 +170,6 @@ Serial.println("i2c to follow");
 float CurrentTemp(){
  sensors.requestTemperatures();
  float reading = sensors.getTempCByIndex(0);
- //float reading = analogRead(TempPin);
- /*
- // converting that reading to voltage, for 3.3v arduino use 3.3
- float voltage = reading * 5.0;
- voltage /= 1024.0;  
- // Temp in Celsius
- float tempC = (voltage - 0.5) * 100 ;
- // Temp in Fahrenheit
- float tempF = (tempC * 9.0 / 5.0) + 32.0;
- 
- return tempC;*/
  return reading;
 }
 
