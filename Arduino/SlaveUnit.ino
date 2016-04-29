@@ -44,6 +44,8 @@ float MaxTemp = 29;
 float MinpH = 5.5;
 float MaxpH = 8.5;
 
+void(* resetFunc) (void) = 0;//declare reset function at address 0
+
 void setup() {
  //analogReference(DEFAULT);  //for use to determine whether it is safe to print to the lcd screen
  Serial.begin(9600);
@@ -152,8 +154,6 @@ void do_command(String x) {
     return;
   }
 }
-
-void(* resetFunc) (void) = 0;//declare reset function at address 0
 
 void startupinfo(){
 Serial.println("Aquariumatic Tank Unit");
