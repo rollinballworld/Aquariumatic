@@ -83,10 +83,10 @@ class TankHandler(tornado.web.RequestHandler):
             update_response = {}
             update_response['TankNo'] = aquarium_id
             update_response['msg'] = 'Update requested'
-            update_response['TempValue'] = aquarium.CurrentReading('Temp')
+            update_response['TempValue'] = aquarium.CurrentReading('Temp').rstrip()
             update_response['pHValue'] = aquarium.CurrentReading('pH').rstrip()
-            update_response['LightValue'] = aquarium.CurrentReading('Light')
-            update_response['PumpValue'] = aquarium.CurrentReading('Pump')
+            update_response['LightValue'] = aquarium.CurrentReading('Light').rstrip()
+            update_response['PumpValue'] = aquarium.CurrentReading('Pump').rstrip()
             self.write(json.dumps(update_response))
             return
         else:
