@@ -36,7 +36,8 @@ class IndexHandler(tornado.web.RequestHandler):
                 return
         elif WebCommand == 'Arduino':
             if WebValue == 'Reset':
-                ResetSlave()
+                slave = Aquarium(0)
+                slave.ResetSlave()
             else:
                 print('No matching Arduino Command')
                 return
