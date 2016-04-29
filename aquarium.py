@@ -86,7 +86,8 @@ class Aquarium():
     ToSend = 'Current' + requested
     ser.write(ToSend.encode('UTF-8'))
     time.sleep(2)
-    return str(ser.readline()).rstrip()
+    ToReturn = ser.readline().rstrip()
+    return str(ToReturn)[1:]
     ser.close
     
   def CheckAlerts(self):
