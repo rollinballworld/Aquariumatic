@@ -34,6 +34,12 @@ class IndexHandler(tornado.web.RequestHandler):
             else:
                 print('No matching Pi Command')
                 return
+        elif WebCommand == 'Arduino':
+            if WebValue == 'Reset':
+                ResetSlave()
+            else:
+                print('No matching Arduino Command')
+                return
         else:
             print('Command not recognised')
 
