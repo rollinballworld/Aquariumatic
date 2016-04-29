@@ -12,21 +12,32 @@
             //alert("after heating post");
         });
       });
+      $("#ArdReset").click(function(e) {
+        e.preventDefault();
+        var Arduino_value = $(this).val();
+        $.post("", {"command":"Arduino", "value":Arduino_value}, function(data) {
+            //alert("after heating post");
+        });
+      });
     });
 </script>
 </head>  
 <body>
+<div align="center"> 
 <h1>Aquariumatic</h1>
 Welcome to the Aquariumatic Project Home Page! </br>
+<p></p>
 <form>
   <button id="PiReboot" name="Pi" value="Reboot">Reboot Aquariumatic</button>
-  <button id="PiShutdown" name="Pi" value="Shutdown">Safely close Aquariumatic</button>
+  <button id="PiShutdown" name="Pi" value="Shutdown">Safely close Aquariumatic</button><br>
   <p></p>
+  <button id="ArdReset" name="Arduino" value="Reset">Reset Slave Unit</button>
   <p></p>
 <a href="/tank1">Aquarium One</a><br>
 <a href="/tank2">Aquarium Two</a><br>
 <a href="/tank3">Aquarium Three</a><br>
 <a href="/tank4">Aquarium Four</a><br>
 <a href="/tank5">Aquarium Five</a><br>
+</div>
 </body>
 </html>
