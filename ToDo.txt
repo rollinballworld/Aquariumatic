@@ -1,1 +1,2 @@
 LCD Scrambling - work out cause and fix.
+Include EEProm for saving pH and Temperature thresholds.
