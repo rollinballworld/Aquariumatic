@@ -45,7 +45,7 @@ float MinpH = 5.5;
 float MaxpH = 8.5;
 
 void setup() {
- analogReference(DEFAULT);  //for use to determine whether it is safe to print to the lcd screen
+ //analogReference(DEFAULT);  //for use to determine whether it is safe to print to the lcd screen
  Serial.begin(9600);
  sensors.begin();            //start up temp probe library
  //sensors.setResolution(insideThermometer, 10);       // set the temp probe resolution to 10 bit
@@ -295,7 +295,6 @@ String Pump(String x){
 void LCDUpdate(){
     // set the cursor to column 0, line 1
   // (note: line 1 is the second row, since counting begins with 0):
-  CheckVoltage();
   lcd.setCursor(0, 0);
   // print the Temperature:
   if (CurrentTemp() > MaxTemp){
@@ -305,7 +304,6 @@ void LCDUpdate(){
   else{
   lcd.print("Temp: " + String(CurrentTemp()) + "     ");
   }
-  CheckVoltage();
   lcd.setCursor(0,1);
   // print the pH
   if (CurrentpH() > MaxpH){
@@ -315,15 +313,4 @@ void LCDUpdate(){
   else{
   lcd.print("pH: " + String(CurrentpH()) + "       ");
   }
-}
-
-void CheckVoltage(){  
-  while(true){  
-    // 3v(what we want)/5 (reference) x1024/2=614  
-    //we read VSS/2 on port 11, we want more than 2.5v to write on the lcd  
-    if(analogRead(0x1011)>306){  
-      break;  
-    }  
-    delay(50);   
-  }   
 }
