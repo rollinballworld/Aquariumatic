@@ -1,2 +1,1 @@
-Work out problem with Temp Probe
-Add code for pH sensor
+LCD Scrambling - work out cause and fix.
