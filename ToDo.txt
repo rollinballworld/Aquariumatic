@@ -1,2 +1,5 @@
 LCD Scrambling - work out cause and fix.
 Include EEProm for saving pH and Temperature thresholds.
+
+Study link below - regarding sending a JSON compatible string from arduino (ph,temp, status could be compiled into one string for sending via serial:
+    http://stackoverflow.com/questions/18172282/multiple-serial-values-from-arduino-to-processing
