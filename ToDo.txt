@@ -9,3 +9,9 @@ Parsing from JSON with Python:
     http://stackoverflow.com/questions/2835559/parsing-values-from-a-json-file-in-python
 
 Use JSON.load(ArduinoString) to load before parsing from it.
+
+
+Data = json.loads(serial.readline)
+pH =Data['pH']
+Temp = Data['temp']
+etc
