@@ -30,9 +30,7 @@ class Aquarium():
   for device in locations:
     try:
       #ser = serial.Serial(port = device,baudrate = 9600, timeout = 0)
-      ser = serial.Serial(port = device,baudrate = 115200, timeout=0)
-      ser.flushInput()
-      time.sleep(1)
+      ser = serial.Serial(port = device,baudrate = 115200, timeout=5)
     except:
       print("Failed to connect on",device)
       time.sleep(3)
@@ -45,13 +43,13 @@ class Aquarium():
     #AqAddress=i2cList(self.TankNo)
     #Send FunctionName & FunctionValue to the returned i2c Address
     ser=self.ser
-    #ser.flushInput()
     #ser.flushOutput()
     if FunctionName == 'test':
       #Setup a test return value
       print("Test Script receipt")
     else:
       #Run normal i2c send to - TO WRITE
+      ser.flushInput()
       ToSend = FunctionName + FunctionValue
       ser.write(ToSend.encode('UTF-8'))
       time.sleep(.1)
@@ -61,9 +59,8 @@ class Aquarium():
 
   def CurrentStatus(self):
     ser=self.ser
-    #ser.flushInput()
+    ser.flushInput()
     ser.write('CurrentStatus'.encode('UTF-8'))
-    time.sleep(3)
     Received=ser.readline().rstrip()
     return str(Received)[1:]
     #ser.close
