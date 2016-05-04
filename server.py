@@ -77,16 +77,16 @@ class TankHandler(tornado.web.RequestHandler):
             self.write(json.dumps({"msg":"water pump set to " + WebValue}, default=lambda x: None))
             return
         elif WebCommand == 'UpdateValues':
-            #print(WebCommand + ": " + WebValue)
-            #aquarium.SendParameter(mintemp_data, maxtemp_data, minph_data, maxph_data)
-            #aquarium.SendCommand(WebCommand, WebValue)
+            slave_json = aquarium.CurrentStatus().rstrip("'")[1:]
+            loaded_json = json.loads(slave_json)
+            print(loaded_json)
             update_response = {}
             update_response['TankNo'] = aquarium_id
-            update_response['msg'] = 'Update requested'
-            update_response['TempValue'] = aquarium.CurrentReading('Temp').rstrip()
-            update_response['pHValue'] = aquarium.CurrentReading('pH').rstrip()
-            update_response['LightValue'] = aquarium.CurrentReading('Light').rstrip()
-            update_response['PumpValue'] = aquarium.CurrentReading('Pump').rstrip()
+            update_response['msg'] = loaded_json["msg"]
+            update_response['TempValue'] = loaded_json["Temp"] + " " + chr(176) + "C"
+            update_response['pHValue'] = loaded_json["pH"]
+            update_response['LightValue'] = loaded_json["Lights"]
+            update_response['PumpValue'] = loaded_json["Pump"]
             self.write(json.dumps(update_response))
             return
         else:
