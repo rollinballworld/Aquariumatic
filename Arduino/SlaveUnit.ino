@@ -48,7 +48,7 @@ void(* resetFunc) (void) = 0;//declare reset function at address 0
 
 void setup() {
  //analogReference(DEFAULT);  //for use to determine whether it is safe to print to the lcd screen
- Serial.begin(9600);
+ Serial.begin(115200);
  sensors.begin();            //start up temp probe library
  //sensors.setResolution(insideThermometer, 10);       // set the temp probe resolution to 10 bit
 
@@ -81,7 +81,7 @@ void setup() {
 void loop() {
  CheckSerial();
  LCDUpdate();
- delay(500);
+ delay(250);
 }
 
 void receiveEvent(int howMany){
@@ -129,26 +129,25 @@ void do_command(String x) {
   else if (x == "PumpOff"){
     Pump("off");
   }
-  else if (x == "CurrentTemp"){
-    Serial.println(String(CurrentTemp()));
-  }
-  else if (x == "CurrentpH"){
-    Serial.println(String(CurrentpH()));
-  }
-  else if (x == "CurrentLight"){
-    Serial.println(Lights("check"));
-  }
-  else if (x == "CurrentPump"){
-    Serial.println(Pump("check"));
-  }
   else if (x == "Parameters"){
     //MinTemp = Serial.read();
     Serial.println("Parameters received.");
   }
   else if (x == "ResetSlave"){
-    //MinTemp = Serial.read();
-    Serial.println("Resetting...");
+    //Serial.println("Resetting...");
     resetFunc();
+  }
+  else if (x == "CurrentStatus"){
+    //compile a JSON-like string of all values
+    String json = "";
+    json = "{\"Temp\": \"" + String(CurrentTemp()) + "\", ";
+    json = json + "\"pH\": \"" + CurrentpH() + "\", ";
+    json = json + "\"Lights\": \"" + Lights("check") + "\", ";
+    json = json + "\"Pump\": \"" + Pump("check") + "\", ";
+    json = json + "\"Heating\": \"" + Heating("check") + "\", ";
+    json = json + "\"AqStatus\": \"" + "Healthy" + "\", ";
+    json = json + "\"msg\": \"" + "Update Received" + "\"}";
+    Serial.println(json);
   }
   else{
     return;
@@ -287,9 +286,12 @@ void LCDUpdate(){
   lcd.setCursor(0, 0);
   // print the Temperature:
   if (CurrentTemp() > MaxTemp){
-    lcd.print("TEMP HIGH       ");}
+    lcd.print("TEMP HIGH       ");
+    Heating("off");
+    }
   else if (CurrentTemp() < MinTemp){
-    lcd.print("TEMP LOW        ");}
+    lcd.print("TEMP LOW-HTR ON");
+    Heating("on");}
   else{
   lcd.print("Temp: " + String(CurrentTemp()) + "     ");
   }
