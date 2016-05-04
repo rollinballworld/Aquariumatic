@@ -1,0 +1,10 @@
+Python3.x
+  Packages Required:
+  -PySerial
+  -Tornado
+
+Arduino IDE
+  Libraries Required:
+  -OneWire
+  -DallasTemperature
+  
