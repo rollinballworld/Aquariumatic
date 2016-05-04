@@ -1,17 +1,2 @@
 LCD Scrambling - work out cause and fix.
 Include EEProm for saving pH and Temperature thresholds.
-
-Study link below - regarding sending a JSON compatible string from arduino (ph,temp, status could be 
-compiled into one string for sending via serial:
-    http://stackoverflow.com/questions/18172282/multiple-serial-values-from-arduino-to-processing
-
-Parsing from JSON with Python:    
-    http://stackoverflow.com/questions/2835559/parsing-values-from-a-json-file-in-python
-
-Use JSON.load(ArduinoString) to load before parsing from it.
-
-
-Data = json.loads(serial.readline)
-pH =Data['pH']
-Temp = Data['temp']
-etc
