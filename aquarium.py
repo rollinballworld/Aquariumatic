@@ -29,7 +29,10 @@ class Aquarium():
     
   for device in locations:
     try:
-      ser = serial.Serial(port = device,baudrate = 9600, timeout = 0)
+      #ser = serial.Serial(port = device,baudrate = 9600, timeout = 0)
+      ser = serial.Serial(port = device,baudrate = 115200, timeout=0)
+      ser.flushInput()
+      time.sleep(1)
     except:
       print("Failed to connect on",device)
       time.sleep(3)
@@ -52,9 +55,18 @@ class Aquarium():
       ToSend = FunctionName + FunctionValue
       ser.write(ToSend.encode('UTF-8'))
       time.sleep(.1)
-      ser.close
+      #ser.close
       print(ToSend +' Command Sent')
       return
+
+  def CurrentStatus(self):
+    ser=self.ser
+    #ser.flushInput()
+    ser.write('CurrentStatus'.encode('UTF-8'))
+    time.sleep(3)
+    Received=ser.readline().rstrip()
+    return str(Received)[1:]
+    #ser.close
     
   def SendParameter(self, NewMinTemp, NewMaxTemp, NewMinpH, NewMaxpH):
     #Send AquariumNumber to i2cList to have the i2c address returned
@@ -74,7 +86,7 @@ class Aquarium():
       ser.write(str(NewMaxTemp).encode('UTF-8'))
       ser.write(str(NewMinpH).encode('UTF-8'))
       ser.write(str(NewMaxpH).encode('UTF-8'))
-      ser.close
+      #ser.close
       print('Parameters Sent')
       return
     
@@ -86,9 +98,9 @@ class Aquarium():
     ToSend = 'Current' + requested
     ser.write(ToSend.encode('UTF-8'))
     time.sleep(2)
-    ToReturn = ser.readline().rstrip()
-    return str(ToReturn)[1:]
-    ser.close
+    ToReturn = ser.readline()
+    return str(ToReturn)
+    #ser.close
     
   def CheckAlerts(self):
     ser=self.ser
@@ -98,6 +110,10 @@ class Aquarium():
     ser=self.ser
     ToSend = 'ResetSlave'
     ser.write(ToSend.encode('UTF-8'))    
+    ser.close
+
+  def CloseSerial(self):
+    ser=self.ser
     ser.close
 
 def i2cList(self, AquariumNumber):
