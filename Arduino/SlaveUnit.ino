@@ -40,6 +40,7 @@ DallasTemperature sensors(&oneWire);
 String stri2c = "";     // for incoming i2c data
 String strSerial = "";  // for incoming serial data
 float MinTemp = 20;
+float NominalTemp = 24;
 float MaxTemp = 29;
 float MinpH = 5.5;
 float MaxpH = 8.5;
@@ -285,16 +286,21 @@ void LCDUpdate(){
   // (note: line 1 is the second row, since counting begins with 0):
   lcd.setCursor(0, 0);
   // print the Temperature:
-  if (CurrentTemp() > MaxTemp){
+    if (CurrentTemp() >= MaxTemp){
     lcd.print("TEMP HIGH       ");
     Heating("off");
     }
-  else if (CurrentTemp() < MinTemp){
+  else if (CurrentTemp() <= MinTemp){
     lcd.print("TEMP LOW-HTR ON");
-    Heating("on");}
+    Heating("on");
+    }
+  else if (CurrentTemp() >= NominalTemp){
+    lcd.print("Temp: " + String(CurrentTemp()) + "\337C   ");
+    Heating("off");
+    }
   else{
-  lcd.print("Temp: " + String(CurrentTemp()) + "     ");
-  }
+    lcd.print("Temp: " + String(CurrentTemp())  + "\337C   ");
+    }
   lcd.setCursor(0,1);
   // print the pH
   if (CurrentpH() > MaxpH){
