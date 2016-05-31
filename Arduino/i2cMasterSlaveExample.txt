@@ -1,3 +1,4 @@
+//from http://www.gammon.com.au/i2c
 // Written by Nick Gammon
 // February 2012
 
