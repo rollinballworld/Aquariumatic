@@ -1,2 +1,9 @@
 LCD Scrambling - work out cause and fix.
 Include EEProm for saving pH and Temperature thresholds.
+
+Work on Python script to handle sensors attached to GPIO:
+- screen http://www.raspberrypi-spy.co.uk/2015/05/using-an-i2c-enabled-lcd-screen-with-the-raspberry-pi/
+(requires level shifter)
+ - 4 channel relay board
+ - pH sensor
+ - one wire digital temp sensors
