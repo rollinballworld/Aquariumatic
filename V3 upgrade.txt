@@ -1,0 +1,13 @@
+
+
+Write an updated Aquariumatic class to cater for the features of the all-in-one master unit.
+The Pi will have a set or relays and sensors attached to them and act as the default tank (/tank1 on the webserver)
+The functions in the class should always request the TankNo variable from the address; if it is tank1 then use 
+onboard peripherals, if tank2+ then send a command via i2c to the appropriate slave device.
+
+create a csv file for i2c addresses
+This will allow us to map the i2c slave address against a tank number, or to denote serial is to be used.
+
+Rewrite the Arduino slave code to respond to both serial (for attaching to a PC/single master unit).
+- experiment with i2c screens for it. Can a software based i2c be used to allow the arduino to 
+allow the screens to be kept off the main i2c line, with the arduino acting as the slave for it?
