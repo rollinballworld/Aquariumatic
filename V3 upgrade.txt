@@ -11,3 +11,6 @@ This will allow us to map the i2c slave address against a tank number, or to den
 Rewrite the Arduino slave code to respond to both serial (for attaching to a PC/single master unit).
 - experiment with i2c screens for it. Can a software based i2c be used to allow the arduino to 
 allow the screens to be kept off the main i2c line, with the arduino acting as the slave for it?
+
+Add software serial port to the arduino code to allow for a bluetooth/esp8266 module to be added. Opens 
+the options for attaching other devices.
