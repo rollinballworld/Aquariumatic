@@ -1,0 +1,11 @@
+To implement:
+
+1. Complete i2c slave code
+2. Switch lcd code for i2c lcd use
+  Look to implementing Software i2c for one-way communication with the lcd:
+    http://playground.arduino.cc/Main/SoftwareI2CLibrary
+3. Create a SoftwareSerial port for the expansion port - will connect to either a Bluetooth or ESP8266 module.
+4. Adapt sketch to run incuding the Serial, SoftwareSerial and i2c functions:
+  Listen for commands coming in from all three; Send all Serial returns to Serial and SoftwareSerial, and 
+  send all i2c returns to i2c and SoftwareSerial
+5. Make code compatible with various Arduinos
