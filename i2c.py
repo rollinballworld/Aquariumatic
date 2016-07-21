@@ -1,12 +1,14 @@
-#This script will contain functions for polling the i2c data and
-#writing it to a table or a csv file
+#This script will contain functions for:
+#Storing i2c device information (Table/csv file?)
+#Sending data requests
+#Receiving and processing data
 #
-#This will be scheduled to run on a Cron job every x minutes, and the server script can then retrieve values from the csv files.
-#Allows the page to use the values independently of Arduinos.
+#Create a class when functions are complete
+
 from time import sleep
 import smbus
 
-def i2cList():
+def i2cDevices():
   print("Scanning")
     bus = smbus.SMBus(1) # 1 indicates /dev/i2c-1; use 0 if not working
     found_slaves = []
