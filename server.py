@@ -146,8 +146,8 @@ class AquariumaticHandler(tornado.web.RequestHandler):
             self.write('parameter not defined')
 
 def UpdateIPs():
-    lcd_string("LAN: " + get_ip_address('eth0'),LCD_LINE_3)
-    lcd_string("WLAN: " + get_ip_address('wlan0'),LCD_LINE_4) 
+    #lcd_string("LAN: " + get_ip_address('eth0'),LCD_LINE_3)
+    lcd_string("IP_" + get_ip_address('wlan0'),LCD_LINE_2) 
 
 if __name__ == "__main__":
     if sys.platform == 'win32':
