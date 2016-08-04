@@ -99,7 +99,7 @@ def main():
   while True:
     # Send some text
     lcd_string("Aq_Test Screen  ",LCD_LINE_1)
-    lcd_string("WIP: " + get_ip_address('wlan0'),LCD_LINE_4)
+    lcd_string("WIP: " + get_ip_address('wlan0'),LCD_LINE_2)
 
     time.sleep(2)
 
