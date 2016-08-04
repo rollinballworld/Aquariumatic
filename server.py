@@ -151,11 +151,11 @@ def UpdateIPs():
 
 if __name__ == "__main__":
     if sys.platform == 'win32':
-        #No Action required; no screen to update
+        x=1
     else:
         lcd_init()
         lcd_string("Aquariumatic V3 ",LCD_LINE_1)
-        lcd_string("WIP: " + get_ip_address('wlan0'),LCD_LINE_2)
+        lcd_string("IP_" + get_ip_address('wlan0'),LCD_LINE_2)
     tornado.options.parse_command_line()
     app = tornado.web.Application(
         handlers=[
