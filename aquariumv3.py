@@ -31,6 +31,7 @@ class Aquarium():
             time.sleep(3)
   elif sys.platform == 'linux':
     #for RPI version 1, use "bus = smbus.SMBus(0)"
+    import smbus
     bus = smbus.SMBus(1)
   else:
     print('Unrecognised platform. Please contact Craig for updates.')
