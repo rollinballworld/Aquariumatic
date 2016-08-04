@@ -23,19 +23,18 @@ class Aquarium():
   #On Error try Linux Port
   if sys.platform == 'win32':
     locations=['\\\\.\\COM12']
+    for device in locations:
+        try:
+            ser = serial.Serial(port = device,baudrate = 115200, timeout=5)
+        except:
+            print("Failed to connect on",device)
+            time.sleep(3)
   elif sys.platform == 'linux':
-    locations=['/dev/ttyUSB0']
     #for RPI version 1, use "bus = smbus.SMBus(0)"
     bus = smbus.SMBus(1)
   else:
-    print('Unrecognised platform. Please contact Liam for updates.')
+    print('Unrecognised platform. Please contact Craig for updates.')
     
-  for device in locations:
-    try:
-      ser = serial.Serial(port = device,baudrate = 115200, timeout=5)
-    except:
-      print("Failed to connect on",device)
-      time.sleep(3)
 
   def __init__(self, TankNo):
     self.TankNo = TankNo
