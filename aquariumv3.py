@@ -33,6 +33,10 @@ class Aquarium():
     #for RPI version 1, use "bus = smbus.SMBus(0)"
     import smbus
     bus = smbus.SMBus(1)
+  elif sys.platform == 'linux2':
+    #for RPI version 1, use "bus = smbus.SMBus(0)"
+    import smbus
+    bus = smbus.SMBus(1)
   else:
     print('Unrecognised platform. Please contact Craig for updates.')
     
@@ -40,32 +44,54 @@ class Aquarium():
   def __init__(self, TankNo):
     self.TankNo = TankNo
     
-  def SendCommand(self, FunctionName, FunctionValue):
+  def SendCommand(self, TankNo, FunctionName, FunctionValue):
     #Send AquariumNumber to i2cList to have the i2c address returned
     #AqAddress=SlaveList(self.TankNo)
     #Send FunctionName & FunctionValue to the returned i2c Address
     ser=self.ser
-    #ser.flushOutput()
+    
     if FunctionName == 'test':
       #Setup a test return value
       print("Test Script receipt")
     else:
-      #Run normal i2c send to - TO WRITE
-      ser.flushInput()
-      ToSend = FunctionName + FunctionValue
-      ser.write(ToSend.encode('UTF-8'))
-      time.sleep(.1)
-      #ser.close
-      print(ToSend +' Command Sent')
-      return
+      if TankNo == 0:
+        #/tank0 is the debug page, so return default values
+      elif TankNo == 1:
+        #/tank1 uses onboard sensors
+      else:
+        #Tanks numbered 2 upwards are i2c slaves; to write
+        ser.flushInput()
+        ToSend = FunctionName + FunctionValue
+        ser.write(ToSend.encode('UTF-8'))
+        time.sleep(.1)
+        #ser.close
+        print(ToSend +' Command Sent')
+        return
 
-  def CurrentStatus(self):
-    ser=self.ser
-    ser.flushInput()
-    ser.write('CurrentStatus'.encode('UTF-8'))
-    Received=ser.readline().rstrip()
-    return str(Received)[1:]
-    #ser.close
+  def CurrentStatus(self, TankNo):
+    if TankNo == 0:
+      #/tank0 is the debug page, so return default values
+      FakeInput= "{\"Temp\": \"" + String(CurrentTemp()) + "\", ";
+      json = json + "\"pH\": \"" + CurrentpH() + "\", ";
+      json = json + "\"Lights\": \"" + Lights("check") + "\", ";
+      json = json + "\"Pump\": \"" + Pump("check") + "\", ";
+      json = json + "\"Heating\": \"" + Heating("check") + "\", ";
+      json = json + "\"AqStatus\": \"" + "Healthy" + "\", ";
+      json = json + "\"msg\": \"" + "Update Received" + "\"}";
+      #return str(FakeInput)[1:]
+    elif TankNo == 1:
+      #/tank1 uses onboard sensors - TO WRITE
+      ser=self.ser
+      ser.flushInput()
+      ser.write('CurrentStatus'.encode('UTF-8'))
+      Received=ser.readline().rstrip()
+      return str(Received)[1:]
+    else:
+      ser=self.ser
+      ser.flushInput()
+      ser.write('CurrentStatus'.encode('UTF-8'))
+      Received=ser.readline().rstrip()
+      return str(Received)[1:]
     
   def SendParameter(self, NewMinTemp, NewMaxTemp, NewMinpH, NewMaxpH):
     #Send AquariumNumber to i2cList to have the i2c address returned
