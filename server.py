@@ -67,21 +67,21 @@ class TankHandler(tornado.web.RequestHandler):
         
         if WebCommand == 'Heating':
             #print(WebCommand + ": " + WebValue)
-            aquarium.SendCommand(WebCommand, WebValue)
+            aquarium.SendCommand(aquarium_id, WebCommand, WebValue)
             self.write(json.dumps({"msg":"heater set to " + WebValue}, default=lambda x: None))
             return
         elif WebCommand == 'Light':
             #print(WebCommand + ": " + WebValue)
-            aquarium.SendCommand(WebCommand, WebValue)
+            aquarium.SendCommand(aquarium_id, WebCommand, WebValue)
             self.write(json.dumps({"msg":"lights set to " + WebValue}, default=lambda x: None))
             return
         elif WebCommand == 'Pump':
             #print(WebCommand + ": " + WebValue)
-            aquarium.SendCommand(WebCommand, WebValue)
+            aquarium.SendCommand(aquarium_id, WebCommand, WebValue)
             self.write(json.dumps({"msg":"water pump set to " + WebValue}, default=lambda x: None))
             return
         elif WebCommand == 'UpdateValues':
-            slave_json = aquarium.CurrentStatus().rstrip("'")[1:]
+            slave_json = aquarium.CurrentStatus(aquarium_id).rstrip("'")[1:]
             loaded_json = json.loads(slave_json)
             print(loaded_json)
             update_response = {}
@@ -116,17 +116,17 @@ class AquariumaticHandler(tornado.web.RequestHandler):
         
         if WebCommand == 'Heating':
             #print(WebCommand + ": " + WebValue)
-            aquarium.SendCommand(WebCommand, WebValue)
+            aquarium.SendCommand(aquarium_id, WebCommand, WebValue)
             self.write(json.dumps({"msg":"heater set to " + WebValue}, default=lambda x: None))
             return
         elif WebCommand == 'Light':
             #print(WebCommand + ": " + WebValue)
-            aquarium.SendCommand(WebCommand, WebValue)
+            aquarium.SendCommand(aquarium_id, WebCommand, WebValue)
             self.write(json.dumps({"msg":"lights set to " + WebValue}, default=lambda x: None))
             return
         elif WebCommand == 'Pump':
             #print(WebCommand + ": " + WebValue)
-            aquarium.SendCommand(WebCommand, WebValue)
+            aquarium.SendCommand(aquarium_id, WebCommand, WebValue)
             self.write(json.dumps({"msg":"water pump set to " + WebValue}, default=lambda x: None))
             return
         elif WebCommand == 'UpdateValues':
