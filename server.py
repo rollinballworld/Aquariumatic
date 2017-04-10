@@ -3,6 +3,7 @@ import tornado.httpserver
 import tornado.ioloop
 import tornado.options
 import tornado.web
+import tornado.websocket
 import json
 import time
 import os, sys
@@ -98,16 +99,17 @@ class TankHandler(tornado.web.RequestHandler):
             
 
 class SlaveSocket(tornado.websocket.WebSocketHandler):
+    def check_origin(self, origin):
+        return True
+
     def open(self, input):
         aquarium_id = input
         print("WebSocket opened")
 
-    def on_message(self, message, input):
-        aquarium_id = input
+    def on_message(self, message):
         self.write_message(u"You said: " + message)
 
-    def on_close(self, input):
-        aquarium_id = input
+    def on_close(self):
         print("WebSocket closed")
 
 
@@ -127,7 +129,6 @@ if __name__ == "__main__":
         handlers=[
             (r"/", IndexHandler),
             (r"/ss(\d+)", SlaveSocket),
-            (r"/aq(\d+)", AquariumaticHandler),
             (r"/tank(\d+)", TankHandler)],
             static_path=os.path.join(os.path.dirname(__file__), "static"),
             template_path=os.path.join(os.path.dirname(__file__), "templates"))
