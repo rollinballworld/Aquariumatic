@@ -1,14 +1,100 @@
-/*This sketch will:
-Connect to a wifi network on startup
-Start the serial connection to the Arduino
-Request a data string from the Arduino (in json format)
-Forward string via websocket connection
+/* Source for ESP8266 websocket code:
+https://github.com/morrissinger/ESP8266-Websocket/blob/master/examples/WebSocketClient_Demo/WebSocketClient_Demo.ino
 
-Check whether best to set up the websocket server on the Pi and have the ESP8266s connect to that, or 
-whether to have the ESP8266s as the Socket servers and have the pi operate as the client.
+To Add:
+Add Serial read to receive json packet from Arduino
+Change the data variable to contain this string
+Update rest of code and check syntax
+*/
 
-For now have the server on the ESP8266 (plenty of examples) and add a button to the Pi's web page to 
-send a 'request' command, and receive the string returned.
+#include <ESP8266WiFi.h> 
+#include <WebSocketClient.h> 
 
-Check out these sources:
-https://github.com/morrissinger/ESP8266-Websocket/blob/master/examples/WebSocketClient_Demo/WebSocketClient_Demo.ino*/
+const char* ssid     = "SSID HERE"; 
+const char* password = "PASSWORD HERE"; 
+char path[] = "/ss1"; 
+char host[] = "echo.websocket.org"; 
+
+WebSocketClient webSocketClient; 
+
+// Use WiFiClient class to create TCP connections 
+WiFiClient client; 
+ 
+void setup() { 
+Serial.begin(115200); 
+delay(10); 
+
+
+  // We start by connecting to a WiFi network 
+  
+  Serial.println(); 
+  Serial.println(); 
+  Serial.print("Connecting to "); 
+  Serial.println(ssid); 
+  WiFi.begin(ssid, password); 
+
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500); 
+    Serial.print("."); 
+  } 
+  
+  Serial.println(""); 
+  Serial.println("WiFi connected");   
+  Serial.println("IP address: "); 
+  Serial.println(WiFi.localIP()); 
+  
+  delay(5000); 
+
+  
+  // Connect to the websocket server 
+  if (client.connect("echo.websocket.org", 8000)) {
+    Serial.println("Connected");
+  } else { 
+    Serial.println("Connection failed.");
+    while(1) {
+      // Hang on failure 
+    } 
+  } 
+
+// Handshake with the server 
+  webSocketClient.path = path; 
+  webSocketClient.host = host; 
+  if (webSocketClient.handshake(client)) {
+    Serial.println("Handshake successful"); 
+  } else {
+    Serial.println("Handshake failed."); 
+    while(1) { 
+      // Hang on failure 
+    }   
+  } 
+
+} 
+
+
+void loop() { 
+  String data; 
+  
+  if (client.connected()) { 
+    webSocketClient.getData(data);
+    if (data.length() > 0) {
+      Serial.print("Received data: "); 
+      Serial.println(data);
+    }
+    
+    // capture the value of analog 1, send it along 
+    pinMode(1, INPUT); 
+    data = String(analogRead(1));
+    
+    webSocketClient.sendData(data);
+  
+  } else {
+    Serial.println("Client disconnected."); 
+    while (1) {
+      //Hang on disconnect. 
+    } 
+  } 
+  
+  // wait to fully let the client disconnect 
+  delay(3000);
+  
+}
