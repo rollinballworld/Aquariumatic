@@ -7,7 +7,7 @@ import json
 import time
 import os, sys
 from aquariumv3 import *
-from lcd import *
+#from lcd import *
 
 from tornado.options import define, options
 define("port", default=8000, help="run on the given port", type=int)
@@ -27,13 +27,13 @@ class IndexHandler(tornado.web.RequestHandler):
                 if sys.platform == 'win32':
                     os.system('shutdown /s')
                 else:
-                    lcd_string("Shutting down...",LCD_LINE_2)
+                    #lcd_string("Shutting down...",LCD_LINE_2)
                     os.system('shutdown -h now')
             elif WebValue == 'Reboot':
                 if sys.platform == 'win32':
                     os.system('shutdown /r')
                 else:
-                    lcd_string("Rebooting...",LCD_LINE_2)
+                    #lcd_string("Rebooting...",LCD_LINE_2)
                     os.system('shutdown -r now')
             else:
                 print('No matching Pi Command')
@@ -97,69 +97,36 @@ class TankHandler(tornado.web.RequestHandler):
             self.write('parameter not defined')
             
 
-
-class AquariumaticHandler(tornado.web.RequestHandler):
-    def get(self, input):
-        self.render('aquariumatic.html')
-
-    def post(self, input):
+class SlaveSocket(tornado.websocket.WebSocketHandler):
+    def open(self, input):
         aquarium_id = input
-        WebCommand = self.get_argument ('command', '')
-        WebValue = self.get_argument ('value', '')
-        mintemp_data = self.get_argument('MinTemp', '')
-        maxtemp_data = self.get_argument('MaxTemp', '')
-        minph_data = self.get_argument('Minph', '')
-        maxph_data = self.get_argument('Maxph', '')
-        self.set_header('Content-Type', 'application/json; charset=UTF-8')
-        
-        aquarium = Aquarium(aquarium_id)
-        
-        if WebCommand == 'Heating':
-            #print(WebCommand + ": " + WebValue)
-            aquarium.SendCommand(aquarium_id, WebCommand, WebValue)
-            self.write(json.dumps({"msg":"heater set to " + WebValue}, default=lambda x: None))
-            return
-        elif WebCommand == 'Light':
-            #print(WebCommand + ": " + WebValue)
-            aquarium.SendCommand(aquarium_id, WebCommand, WebValue)
-            self.write(json.dumps({"msg":"lights set to " + WebValue}, default=lambda x: None))
-            return
-        elif WebCommand == 'Pump':
-            #print(WebCommand + ": " + WebValue)
-            aquarium.SendCommand(aquarium_id, WebCommand, WebValue)
-            self.write(json.dumps({"msg":"water pump set to " + WebValue}, default=lambda x: None))
-            return
-        elif WebCommand == 'UpdateValues':
-            #print(WebCommand + ": " + WebValue)
-            #aquarium.SendParameter(mintemp_data, maxtemp_data, minph_data, maxph_data)
-            #aquarium.SendCommand(WebCommand, WebValue)
-            update_response = {}
-            update_response['TankNo'] = aquarium_id
-            update_response['msg'] = 'Update requested'
-            update_response['TempValue'] = aquarium.CurrentReading('Temp')
-            update_response['pHValue'] = aquarium.CurrentReading('pH')
-            update_response['LightValue'] = aquarium.CurrentReading('Light')
-            update_response['PumpValue'] = aquarium.CurrentReading('Pump')
-            self.write(json.dumps(update_response))
-            return
-        else:
-            self.write('parameter not defined')
+        print("WebSocket opened")
 
-def UpdateIPs():
+    def on_message(self, message, input):
+        aquarium_id = input
+        self.write_message(u"You said: " + message)
+
+    def on_close(self, input):
+        aquarium_id = input
+        print("WebSocket closed")
+
+
+#def UpdateIPs():
     #lcd_string("LAN: " + get_ip_address('eth0'),LCD_LINE_3)
-    lcd_string("IP_" + get_ip_address('wlan0'),LCD_LINE_2) 
+    #lcd_string("IP_" + get_ip_address('wlan0'),LCD_LINE_2) 
 
 if __name__ == "__main__":
     if sys.platform == 'win32':
         x=1
     else:
-        lcd_init()
-        lcd_string("Aquariumatic V3 ",LCD_LINE_1)
-        lcd_string("IP_" + get_ip_address('wlan0'),LCD_LINE_2)
+        #lcd_init()
+        #lcd_string("Aquariumatic V3 ",LCD_LINE_1)
+        #lcd_string("IP_" + get_ip_address('wlan0'),LCD_LINE_2)
     tornado.options.parse_command_line()
     app = tornado.web.Application(
         handlers=[
             (r"/", IndexHandler),
+            (r"/ss(\d+)", SlaveSocket),
             (r"/aq(\d+)", AquariumaticHandler),
             (r"/tank(\d+)", TankHandler)],
             static_path=os.path.join(os.path.dirname(__file__), "static"),
@@ -171,6 +138,6 @@ if __name__ == "__main__":
     print ("Listening on port:", options.port)
     main_loop = tornado.ioloop.IOLoop.instance()
     # Schedule event (5 seconds from now)
-    main_loop.call_later(5, UpdateIPs)
+    #main_loop.call_later(5, UpdateIPs)
     # Start main loop
     main_loop.start()
