@@ -7,6 +7,7 @@ import tornado.websocket
 import json
 import time
 import os, sys
+#from aquariumUSB import *
 from aquariumv3 import *
 #from lcd import *
 
