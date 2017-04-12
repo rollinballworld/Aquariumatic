@@ -1,0 +1,16 @@
+Hub
+Continue to develop Python webserver for
+Following individual modules planned for variants
+-aquarium.py - websocket based data collection
+-aquariumUSB.py - for use with first prototype, gathers data via USB serial connection
+-aquarium-2c.py - backup protocol for non-wireless setups
+-Hardware.py - to create an all-in-one unit based solely on the Pi (no slaves controllers)
+-IoT.py - to pass collected data to sites such asd Thingspeak if connected to internet.
+-config.py - add a python script to determine what modules are required and manage code in a modular way.
+
+
+Slave controllers
+Copy and tweak current slave sketch to work with new prototype (Uno, relay shield, i2c oled screen)
+Have arduino send data via software serial every 5-10 seconds).
+
+Create ESP8266 sketch to receive data from software serial and send on via websocket.
