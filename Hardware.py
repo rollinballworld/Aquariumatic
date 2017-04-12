@@ -1,5 +1,8 @@
 import RPi.GPIO as GPIO
 
+#This script is to allow the Pi Hub to be used as the aquarium monitor for small setups.
+#Work in progress
+
 class PiRelay:
     def __init__(self, PinNo):
         self.PinNo = PinNo
@@ -49,7 +52,14 @@ class i2c:
     def getValues(self, address):
         # request values from i2c address provided and write it to csv file
         return values
-  
+    
     def RetrieveData(self, address):
         #read last line of [address].csv
         #use this data to populate the web page
+        
+        
+class sensors:
+    #Setup and read sensor pins for temp and pH
+    
+class lcdscreen:
+    #copy lcd.py stuff here
